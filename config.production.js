@@ -1,7 +1,7 @@
 // Production Configuration (uses Cloudflare Worker proxy)
 const Config = {
   // API Proxy - all requests go through Cloudflare Worker
-  API_PROXY: 'https://writing-flow-proxy.6520bb287e28edc6f41f1d2b11196e57.workers.dev',
+  API_PROXY: 'https://twilight-tree-0846.didjerama.workers.dev',
   
   // Dummy providers for compatibility (not used in proxy mode)
   API_PROVIDERS: {

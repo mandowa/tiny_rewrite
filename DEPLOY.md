@@ -4,8 +4,8 @@
 
 ### 1. Worker (API Proxy) 已部署
 
-✅ Worker 名稱: `writing-flow-proxy`
-✅ URL: `https://writing-flow-proxy.6520bb287e28edc6f41f1d2b11196e57.workers.dev`
+✅ Worker 名稱: `twilight-tree-0846`
+✅ URL: `https://twilight-tree-0846.didjerama.workers.dev`
 ✅ 環境變數已設定 (API keys 安全儲存)
 
 ### 2. 部署到 Cloudflare Pages
