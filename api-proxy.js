@@ -39,7 +39,15 @@ class ProxyAPIClient {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.error || `API error: ${response.status}`;
+        // Handle different error formats
+        let errorMessage = `API error: ${response.status}`;
+        if (typeof errorData.error === 'string') {
+          errorMessage = errorData.error;
+        } else if (errorData.error?.message) {
+          errorMessage = errorData.error.message;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
         throw new Error(errorMessage);
       }
       
