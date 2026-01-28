@@ -22,7 +22,7 @@ const Config = {
       { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful' }
     ],
     gemini: [
-      { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest & Free' }
+      { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest' }
     ]
   },
   
@@ -31,7 +31,7 @@ const Config = {
     { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality', provider: 'azure' },
     { id: 'dft-foundry-resource.gpt-4.1', label: 'GPT-4.1', description: 'Balanced', provider: 'azure' },
     { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
-    { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest & Free', provider: 'gemini' }
+    { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest', provider: 'gemini' }
   ],
   
   DEFAULT_MODELS: {
