@@ -3,7 +3,7 @@ const Config = {
   // API Proxy - all requests go through Cloudflare Worker
   API_PROXY: 'https://twilight-tree-0846.didjerama.workers.dev',
   
-  // Dummy providers for compatibility (not used in proxy mode)
+  // Providers (used for compatibility, actual keys are in Worker)
   API_PROVIDERS: {
     azure: { name: 'Azure Foundry', type: 'proxy' },
     gemini: { name: 'Google Gemini', type: 'proxy' }
@@ -14,19 +14,7 @@ const Config = {
   // Input Constraints
   MAX_INPUT_LENGTH: 200,
   
-  // Available Models (combined from all providers)
-  MODELS: {
-    azure: [
-      { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality' },
-      { id: 'dft-foundry-resource.gpt-4.1', label: 'GPT-4.1', description: 'Balanced' },
-      { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful' }
-    ],
-    gemini: [
-      { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest' }
-    ]
-  },
-  
-  // Combined model list for unified selector
+  // Unified model list - single source of truth
   ALL_MODELS: [
     { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality', provider: 'azure' },
     { id: 'dft-foundry-resource.gpt-4.1', label: 'GPT-4.1', description: 'Balanced', provider: 'azure' },
@@ -38,8 +26,6 @@ const Config = {
     azure: 'dft-foundry-resource.gpt-4.1',
     gemini: 'gemini-2.5-flash-lite'
   },
-  
-  DEFAULT_PROVIDER: 'azure',
   
   // Rewrite Styles
   STYLES: {
@@ -113,8 +99,10 @@ Rewrite the provided [Draft Text] for verbal delivery in a workplace setting. Fo
     }
   },
   
-  // API Parameters
+  // Timing constants
   TIMEOUT_MS: 30000,
+  DEBOUNCE_MS: 500,
+  STREAM_DELAY_MS: 5,
   
   // TTS Configuration
   TTS_CONFIG: {
@@ -136,3 +124,10 @@ Rewrite the provided [Draft Text] for verbal delivery in a workplace setting. Fo
     CONFIG_ERROR: 'Service temporarily unavailable. Please try again later.'
   }
 };
+
+// Generate MODELS from ALL_MODELS (derived data, not duplicated)
+Config.MODELS = Config.ALL_MODELS.reduce((acc, model) => {
+  if (!acc[model.provider]) acc[model.provider] = [];
+  acc[model.provider].push({ id: model.id, label: model.label, description: model.description });
+  return acc;
+}, {});

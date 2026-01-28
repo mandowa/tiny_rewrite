@@ -242,7 +242,7 @@ class APIClient {
         for (const char of text) {
           onToken(char);
           // Small delay for visual effect
-          await new Promise(r => setTimeout(r, 5));
+          await new Promise(r => setTimeout(r, Config.STREAM_DELAY_MS || 5));
         }
       }
       
@@ -315,7 +315,7 @@ class InputArea {
     
     this.spellCheckTimer = setTimeout(() => {
       this.checkSpelling();
-    }, 500);
+    }, Config.DEBOUNCE_MS || 500);
   }
   
   handleKeyDown(e) {
