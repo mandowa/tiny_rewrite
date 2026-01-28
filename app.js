@@ -888,6 +888,9 @@ class App {
   }
 
   isProviderConfigured(provider) {
+    // In proxy mode, all providers are configured via the Worker
+    if (this.useProxy) return true;
+    
     const config = Config.API_PROVIDERS[provider];
     if (!config) return false;
     return Boolean(config.endpoint && config.apiKey);
