@@ -3,6 +3,14 @@ const Config = {
   // API Proxy - all requests go through Cloudflare Worker
   API_PROXY: 'https://writing-flow-proxy.6520bb287e28edc6f41f1d2b11196e57.workers.dev',
   
+  // Dummy providers for compatibility (not used in proxy mode)
+  API_PROVIDERS: {
+    azure: { name: 'Azure Foundry', type: 'proxy' },
+    gemini: { name: 'Google Gemini', type: 'proxy' }
+  },
+  
+  DEFAULT_PROVIDER: 'azure',
+  
   // Input Constraints
   MAX_INPUT_LENGTH: 200,
   

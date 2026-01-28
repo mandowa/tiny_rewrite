@@ -1,0 +1,8 @@
+{
+  "name": "writing-flow",
+  "version": "1.0.0",
+  "description": "AI Writing Assistant",
+  "scripts": {
+    "build": "echo 'No build needed - static site'"
+  }
+}
