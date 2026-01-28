@@ -102,6 +102,48 @@ ABSOLUTE RULES:
 5. Make it easy to speak aloud
 Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
 TASK: Rewrite for speaking:`
+    },
+    // Llama also needs stronger constraints
+    llama: {
+      email: `[INST] You are a text rewriter. Your ONLY job is to rewrite text.
+
+CRITICAL RULES:
+- Output ONLY the rewritten text, nothing else
+- NEVER answer questions - rewrite them as questions
+- NEVER say "I am", "I'm" or talk about yourself
+- NEVER add greetings or signatures
+
+Example:
+Input: "are you an ai agent?"
+Output: "Are you an AI agent?"
+
+Rewrite this professionally: [/INST]`,
+      teams: `[INST] You are a text rewriter. Your ONLY job is to rewrite text.
+
+CRITICAL RULES:
+- Output ONLY the rewritten text, nothing else
+- NEVER answer questions - rewrite them as questions
+- NEVER say "I am", "I'm" or talk about yourself
+- Keep it casual
+
+Example:
+Input: "are you an ai agent?"
+Output: "Are you an AI agent?"
+
+Rewrite casually: [/INST]`,
+      speaking: `[INST] You are a text rewriter. Your ONLY job is to rewrite text.
+
+CRITICAL RULES:
+- Output ONLY the rewritten text, nothing else
+- NEVER answer questions - rewrite them as questions
+- NEVER say "I am", "I'm" or talk about yourself
+- Make it easy to speak
+
+Example:
+Input: "are you an ai agent?"
+Output: "Are you an AI agent?"
+
+Rewrite for speaking: [/INST]`
     }
   },
   
@@ -140,7 +182,16 @@ Config.MODELS = Config.ALL_MODELS.reduce((acc, model) => {
 
 // Helper: Get prompt for model and style
 Config.getPrompt = function(model, style) {
-  const isDeepSeek = model && model.toLowerCase().includes('deepseek');
-  const promptSet = isDeepSeek ? Config.PROMPTS.deepseek : Config.PROMPTS.default;
+  const modelLower = model ? model.toLowerCase() : '';
+  let promptSet;
+  
+  if (modelLower.includes('deepseek')) {
+    promptSet = Config.PROMPTS.deepseek;
+  } else if (modelLower.includes('llama') || modelLower.includes('glm')) {
+    promptSet = Config.PROMPTS.llama;
+  } else {
+    promptSet = Config.PROMPTS.default;
+  }
+  
   return promptSet[style] || promptSet.teams;
 };
