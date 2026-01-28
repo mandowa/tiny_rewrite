@@ -513,6 +513,11 @@ class InputArea {
     this.textarea.disabled = !enabled;
   }
   
+  setMaxLength(newLimit) {
+    this.maxLength = newLimit;
+    this.updateCharCount();
+  }
+  
   onChange(callback) {
     this.changeCallbacks.push(callback);
   }
@@ -927,6 +932,9 @@ class App {
       }
       
       this.state.setSelectedModel(modelId);
+      
+      // Update input limit based on model
+      this.updateInputLimit(modelId);
     });
     
     // Style checkboxes
@@ -990,7 +998,7 @@ class App {
     // Validate input
     const validation = this.validationService.validateInput(
       this.state.inputText,
-      Config.MAX_INPUT_LENGTH
+      this.getCurrentInputLimit()
     );
     
     if (!validation.isValid) {
@@ -1062,6 +1070,22 @@ class App {
       
       this.apiClient.generateRewrite(params);
     });
+  }
+  
+  updateInputLimit(modelId) {
+    const model = Config.ALL_MODELS?.find(m => m.id === modelId);
+    const newLimit = (model?.unlimited) 
+      ? (Config.MAX_INPUT_LENGTH_UNLIMITED || 10000)
+      : Config.MAX_INPUT_LENGTH;
+    
+    this.inputArea.setMaxLength(newLimit);
+  }
+  
+  getCurrentInputLimit() {
+    const model = Config.ALL_MODELS?.find(m => m.id === this.state.selectedModel);
+    return (model?.unlimited) 
+      ? (Config.MAX_INPUT_LENGTH_UNLIMITED || 10000)
+      : Config.MAX_INPUT_LENGTH;
   }
   
   checkAllComplete() {

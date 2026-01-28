@@ -15,6 +15,7 @@ const Config = {
   
   // Input Constraints
   MAX_INPUT_LENGTH: 200,
+  MAX_INPUT_LENGTH_UNLIMITED: 10000, // For models without limit
   
   // Unified model list - single source of truth
   ALL_MODELS: [
@@ -23,8 +24,8 @@ const Config = {
     { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
     { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest', provider: 'gemini' },
     { id: 'qwen-plus', label: 'Qwen Plus', description: 'Alibaba AI', provider: 'qwen' },
-    { id: 'meta/llama-3.3-70b-instruct', label: 'Llama 3.3 70B', description: 'Meta AI', provider: 'nvidia' },
-    { id: 'z-ai/glm4.7', label: 'GLM-4.7', description: 'Zhipu AI', provider: 'nvidia' }
+    { id: 'meta/llama-3.3-70b-instruct', label: 'Llama 3.3 70B', description: 'Meta AI', provider: 'nvidia', unlimited: true },
+    { id: 'z-ai/glm4.7', label: 'GLM-4.7', description: 'Zhipu AI', provider: 'nvidia', unlimited: true }
   ],
   
   DEFAULT_MODELS: {
