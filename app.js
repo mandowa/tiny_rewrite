@@ -826,6 +826,7 @@ class App {
       // Production mode: use proxy
       this.apiClient = new ProxyAPIClient(Config.API_PROXY);
       this.useProxy = true;
+      this.currentProvider = Config.DEFAULT_PROVIDER || 'azure'; // Set default provider for proxy mode
       console.log('Using API Proxy:', Config.API_PROXY);
     } else {
       // Development mode: direct API calls
@@ -837,7 +838,7 @@ class App {
     
     // Initialize state
     this.state = new AppState();
-    this.state.setSelectedModel(Config.DEFAULT_MODELS[this.useProxy ? 'azure' : this.currentProvider]);
+    this.state.setSelectedModel(Config.DEFAULT_MODELS[this.currentProvider]);
     
     // Initialize components
     this.inputArea = new InputArea(Config.MAX_INPUT_LENGTH);
@@ -845,7 +846,7 @@ class App {
     if (!this.useProxy) {
       this.providerSelector.value = this.currentProvider;
     }
-    this.modelSelector = new ModelSelector(Config.MODELS[this.useProxy ? 'azure' : this.currentProvider]);
+    this.modelSelector = new ModelSelector(Config.MODELS[this.currentProvider]);
     this.rewriteDisplays = {
       email: new RewriteDisplay('email'),
       teams: new RewriteDisplay('teams'),
