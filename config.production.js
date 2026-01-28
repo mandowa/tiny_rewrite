@@ -14,7 +14,7 @@ const Config = {
   // Input Constraints
   MAX_INPUT_LENGTH: 200,
   
-  // Available Models by Provider
+  // Available Models (combined from all providers)
   MODELS: {
     azure: [
       { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality' },
@@ -25,6 +25,14 @@ const Config = {
       { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest & Free' }
     ]
   },
+  
+  // Combined model list for unified selector
+  ALL_MODELS: [
+    { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality', provider: 'azure' },
+    { id: 'dft-foundry-resource.gpt-4.1', label: 'GPT-4.1', description: 'Balanced', provider: 'azure' },
+    { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
+    { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest & Free', provider: 'gemini' }
+  ],
   
   DEFAULT_MODELS: {
     azure: 'dft-foundry-resource.gpt-4.1',

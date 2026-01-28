@@ -918,11 +918,18 @@ class App {
     const modelSelect = document.getElementById('model-selector');
     modelSelect.innerHTML = '';
     
-    const models = Config.MODELS[this.currentProvider];
+    // In proxy mode, use unified model list if available
+    const models = (this.useProxy && Config.ALL_MODELS) 
+      ? Config.ALL_MODELS 
+      : Config.MODELS[this.currentProvider];
+    
     models.forEach(model => {
       const option = document.createElement('option');
       option.value = model.id;
-      option.textContent = `${model.label} (${model.description})`;
+      option.textContent = `${model.label} — ${model.description}`;
+      if (model.provider) {
+        option.dataset.provider = model.provider;
+      }
       modelSelect.appendChild(option);
     });
     
@@ -992,7 +999,15 @@ class App {
     // Model selection
     const modelSelect = document.getElementById('model-selector');
     modelSelect.addEventListener('change', () => {
-      this.state.setSelectedModel(modelSelect.value);
+      const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+      const modelId = modelSelect.value;
+      
+      // In proxy mode with unified model list, auto-switch provider
+      if (this.useProxy && selectedOption.dataset.provider) {
+        this.currentProvider = selectedOption.dataset.provider;
+      }
+      
+      this.state.setSelectedModel(modelId);
     });
     
     // Style checkboxes
