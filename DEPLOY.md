@@ -16,9 +16,17 @@
 4. 設定：
    - **Project name**: `writing-flow`
    - **Production branch**: `main`
-   - **Build command**: `cp index.production.html index.html && cp config.production.js config.js`
+   - **Framework preset**: None
+   - **Build command**: 留空（或填 `echo "Static site"`）
    - **Build output directory**: `/`
-5. **Save and Deploy**
+5. **Environment variables** → Add variable:
+   - 不需要設定（API keys 在 Worker 中）
+6. **Save and Deploy**
+
+**重要**：部署後需要手動處理檔案：
+- Cloudflare Pages 會直接使用 repo 中的檔案
+- 需要在 repo 中把 `index.production.html` 重新命名為 `index.html`
+- 或使用 Cloudflare Pages Functions 來處理
 
 ### 3. 本地測試
 

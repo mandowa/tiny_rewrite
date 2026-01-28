@@ -1,7 +1,7 @@
 # API Keys - DO NOT COMMIT
 config.js
 
-# Keep development version locally
+# Keep development version locally (not index.deploy.html for deployment)
 index.html
 
 # Python
