@@ -649,3 +649,22 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Mobile: Keep style chips in one row */
+@media (max-width: 640px) {
+  .style-options {
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+  
+  .chip-content {
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 4px;
+  }
+  
+  .chip-icon {
+    width: 12px;
+    height: 12px;
+  }
+}
