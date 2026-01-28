@@ -7,8 +7,22 @@ class ProxyAPIClient {
     this.streamingHandler = new StreamingHandler();
   }
   
-  buildSystemPrompt(style) {
-    return Config.STYLES[style]?.systemPrompt || '';
+  buildSystemPrompt(style, model) {
+    const basePrompt = Config.STYLES[style]?.systemPrompt || '';
+    
+    // DeepSeek needs extra constraints to avoid generating full email templates
+    if (model && model.toLowerCase().includes('deepseek')) {
+      const deepseekSuffix = `
+
+IMPORTANT FOR THIS MODEL:
+- Do NOT write a full email with greeting/signature
+- Do NOT add [Recipient's Name] or [Your Name] placeholders
+- Just improve the wording of the input text
+- Keep the output similar in length to the input`;
+      return basePrompt + deepseekSuffix;
+    }
+    
+    return basePrompt;
   }
   
   async generateRewrite({ provider, model, inputText, style, onToken, onComplete, onError }) {
@@ -16,7 +30,7 @@ class ProxyAPIClient {
     const timeoutId = setTimeout(() => controller.abort(), Config.TIMEOUT_MS);
     
     try {
-      const systemPrompt = this.buildSystemPrompt(style);
+      const systemPrompt = this.buildSystemPrompt(style, model);
       const messages = [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: inputText }
