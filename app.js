@@ -983,6 +983,14 @@ class App {
     // Provider selection
     this.providerSelector.addEventListener('change', () => {
       const selected = this.providerSelector.value;
+      
+      // In proxy mode, just update currentProvider, don't recreate apiClient
+      if (this.useProxy) {
+        this.currentProvider = selected;
+        this.updateModelSelector();
+        return;
+      }
+      
       if (!this.isProviderConfigured(selected)) {
         this.warnIfProviderNotConfigured(selected);
         this.providerSelector.value = this.currentProvider;
