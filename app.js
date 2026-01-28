@@ -134,16 +134,20 @@ class APIClient {
     this.streamingHandler = new StreamingHandler();
   }
   
-  buildSystemPrompt(style) {
+  getSystemPrompt(style, model) {
+    // Use Config.getPrompt if available (production), otherwise fallback
+    if (typeof Config.getPrompt === 'function') {
+      return Config.getPrompt(model, style);
+    }
+    // Fallback for development config without getPrompt
     return Config.STYLES[style]?.systemPrompt || '';
   }
   
   async generateRewrite({ model, inputText, style, onToken, onComplete, onError }) {
     if (this.type === 'gemini') {
       return this.generateRewriteGemini({ model, inputText, style, onToken, onComplete, onError });
-    } else {
-      return this.generateRewriteOpenAI({ model, inputText, style, onToken, onComplete, onError });
     }
+    return this.generateRewriteOpenAI({ model, inputText, style, onToken, onComplete, onError });
   }
   
   async generateRewriteOpenAI({ model, inputText, style, onToken, onComplete, onError }) {
@@ -151,24 +155,20 @@ class APIClient {
     const timeoutId = setTimeout(() => controller.abort(), Config.TIMEOUT_MS);
     
     try {
-      const systemPrompt = this.buildSystemPrompt(style);
-      
-      const requestBody = {
-        model: model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: inputText }
-        ],
-        stream: true
-      };
-      
       const response = await fetch(this.endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: 'system', content: this.getSystemPrompt(style, model) },
+            { role: 'user', content: inputText }
+          ],
+          stream: true
+        }),
         signal: controller.signal
       });
       
@@ -176,12 +176,10 @@ class APIClient {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.error?.message || errorData.detail || `API error: ${response.status}`;
-        throw new Error(errorMessage);
+        throw new Error(errorData.error?.message || errorData.detail || `API error: ${response.status}`);
       }
       
       const reader = response.body.getReader();
-      
       for await (const token of this.streamingHandler.parseSSEStream(reader)) {
         onToken(token);
       }
@@ -189,14 +187,7 @@ class APIClient {
       onComplete();
     } catch (error) {
       clearTimeout(timeoutId);
-      
-      if (error.name === 'AbortError') {
-        onError(new Error(Config.ERROR_MESSAGES.TIMEOUT));
-      } else if (error.message.includes('fetch')) {
-        onError(new Error(Config.ERROR_MESSAGES.NETWORK_ERROR));
-      } else {
-        onError(error);
-      }
+      onError(this.wrapError(error));
     }
     
     return controller;
@@ -207,21 +198,14 @@ class APIClient {
     const timeoutId = setTimeout(() => controller.abort(), Config.TIMEOUT_MS);
     
     try {
-      const systemPrompt = this.buildSystemPrompt(style);
-      const fullPrompt = `${systemPrompt}\n\n${inputText}`;
-      
-      // Use non-streaming endpoint for reliability
+      const fullPrompt = `${this.getSystemPrompt(style, model)}\n\n${inputText}`;
       const endpoint = `${this.endpoint}/${model}:generateContent?key=${this.apiKey}`;
       
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{
-            parts: [{ text: fullPrompt }]
-          }]
+          contents: [{ parts: [{ text: fullPrompt }] }]
         }),
         signal: controller.signal
       });
@@ -230,18 +214,17 @@ class APIClient {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.error?.message || `API error: ${response.status}`;
-        throw new Error(errorMessage);
+        throw new Error(errorData.error?.message || `API error: ${response.status}`);
       }
       
       const data = await response.json();
       const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
       
       if (text) {
-        // Simulate streaming by outputting character by character
-        for (const char of text) {
-          onToken(char);
-          // Small delay for visual effect
+        // Emit by words for better performance
+        const words = text.split(/(\s+)/);
+        for (const word of words) {
+          onToken(word);
           await new Promise(r => setTimeout(r, Config.STREAM_DELAY_MS || 5));
         }
       }
@@ -249,17 +232,161 @@ class APIClient {
       onComplete();
     } catch (error) {
       clearTimeout(timeoutId);
-      
-      if (error.name === 'AbortError') {
-        onError(new Error(Config.ERROR_MESSAGES.TIMEOUT));
-      } else if (error.message.includes('fetch')) {
-        onError(new Error(Config.ERROR_MESSAGES.NETWORK_ERROR));
-      } else {
-        onError(error);
-      }
+      onError(this.wrapError(error));
     }
     
     return controller;
+  }
+  
+  wrapError(error) {
+    if (error.name === 'AbortError') return new Error(Config.ERROR_MESSAGES.TIMEOUT);
+    if (error.message.includes('fetch')) return new Error(Config.ERROR_MESSAGES.NETWORK_ERROR);
+    return error;
+  }
+}
+
+// ============================================================================
+// SpellCheck UI Component (extracted for clarity)
+// ============================================================================
+class SpellCheckUI {
+  constructor(textarea, container) {
+    this.textarea = textarea;
+    this.container = container;
+    this.currentError = null;
+    this.selectedIndex = 0;
+    this.onApply = null;
+  }
+  
+  show(word, wordStart, suggestions) {
+    this.currentError = { word, start: wordStart, end: wordStart + word.length };
+    this.selectedIndex = 0;
+    
+    const coords = this.getPosition(wordStart);
+    this.container.innerHTML = this.buildHTML(word, suggestions);
+    this.container.style.cssText = this.buildContainerStyle(coords);
+    this.bindEvents();
+  }
+  
+  hide() {
+    this.container.style.display = 'none';
+    this.currentError = null;
+  }
+  
+  isVisible() {
+    return this.container.style.display === 'flex';
+  }
+  
+  handleKeyDown(e) {
+    if (!this.isVisible() || !this.currentError) return false;
+    
+    const items = this.container.querySelectorAll('.spell-item');
+    if (items.length === 0) return false;
+    
+    switch (e.key) {
+      case 'ArrowDown':
+        this.selectedIndex = Math.min(this.selectedIndex + 1, items.length - 1);
+        this.updateSelection(items);
+        return true;
+      case 'ArrowUp':
+        this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+        this.updateSelection(items);
+        return true;
+      case 'Enter':
+      case 'Tab':
+        if (items[this.selectedIndex]) {
+          this.applySelection(items[this.selectedIndex].dataset.word);
+          return true;
+        }
+        return false;
+      case 'Escape':
+        this.hide();
+        return true;
+    }
+    return false;
+  }
+  
+  applySelection(word) {
+    if (this.onApply && this.currentError) {
+      this.onApply(word, this.currentError);
+    }
+    this.hide();
+  }
+  
+  updateSelection(items) {
+    items.forEach((item, i) => {
+      const sel = i === this.selectedIndex;
+      item.style.color = sel ? '#a5b4fc' : '#a1a1aa';
+      item.style.background = sel ? 'rgba(99, 102, 241, 0.2)' : 'transparent';
+      item.style.borderLeftColor = sel ? '#6366f1' : 'transparent';
+      item.style.fontWeight = sel ? '500' : '400';
+      item.classList.toggle('selected', sel);
+    });
+  }
+  
+  buildHTML(word, suggestions) {
+    const items = suggestions.map((s, i) => {
+      const sel = i === 0;
+      return `<button type="button" class="spell-item${sel ? ' selected' : ''}" data-word="${s}" style="
+        display:block;width:100%;padding:10px 14px;font-family:inherit;font-size:14px;
+        color:${sel ? '#a5b4fc' : '#a1a1aa'};background:${sel ? 'rgba(99,102,241,0.2)' : 'transparent'};
+        border:none;border-left:3px solid ${sel ? '#6366f1' : 'transparent'};
+        border-bottom:1px solid rgba(255,255,255,0.04);text-align:left;cursor:pointer;
+        font-weight:${sel ? '500' : '400'};">${s}</button>`;
+    }).join('');
+    
+    return `<div style="padding:10px 14px;font-size:12px;font-weight:600;color:#f87171;
+      background:rgba(239,68,68,0.08);border-bottom:1px solid rgba(255,255,255,0.06);">⚠ 「${word}」</div>${items}`;
+  }
+  
+  buildContainerStyle(coords) {
+    return `display:flex;flex-direction:column;position:fixed;top:${coords.top}px;left:${coords.left}px;
+      background:linear-gradient(180deg,#1f1f23 0%,#18181b 100%);border:1px solid rgba(99,102,241,0.4);
+      border-radius:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3),0 10px 20px -2px rgba(0,0,0,0.4);
+      min-width:180px;max-width:260px;overflow:hidden;z-index:99999;`;
+  }
+  
+  bindEvents() {
+    const items = this.container.querySelectorAll('.spell-item');
+    items.forEach((item, index) => {
+      item.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.applySelection(item.dataset.word); };
+      item.onmouseenter = () => { this.selectedIndex = index; this.updateSelection(items); };
+    });
+  }
+  
+  getPosition(position) {
+    const mirror = document.createElement('div');
+    const computed = window.getComputedStyle(this.textarea);
+    const props = ['fontFamily','fontSize','fontWeight','fontStyle','letterSpacing','textTransform',
+      'wordSpacing','textIndent','whiteSpace','wordWrap','wordBreak','paddingTop','paddingRight',
+      'paddingBottom','paddingLeft','borderTopWidth','borderRightWidth','borderBottomWidth',
+      'borderLeftWidth','boxSizing','lineHeight'];
+    
+    Object.assign(mirror.style, {
+      position:'absolute',top:'0',left:'-9999px',visibility:'hidden',
+      whiteSpace:'pre-wrap',wordWrap:'break-word',overflow:'hidden',width:computed.width
+    });
+    props.forEach(p => mirror.style[p] = computed[p]);
+    document.body.appendChild(mirror);
+    
+    mirror.textContent = this.textarea.value.substring(0, position);
+    const span = document.createElement('span');
+    span.textContent = this.textarea.value.substring(position) || '.';
+    mirror.appendChild(span);
+    
+    const textareaRect = this.textarea.getBoundingClientRect();
+    const spanRect = span.getBoundingClientRect();
+    const mirrorRect = mirror.getBoundingClientRect();
+    const lineHeight = parseInt(computed.lineHeight) || 20;
+    
+    const top = textareaRect.top + (spanRect.top - mirrorRect.top) - this.textarea.scrollTop + lineHeight + 4;
+    const left = textareaRect.left + (spanRect.left - mirrorRect.left);
+    
+    document.body.removeChild(mirror);
+    
+    return {
+      top: Math.min(top, window.innerHeight - 200),
+      left: Math.min(Math.max(left, 8), window.innerWidth - 200)
+    };
   }
 }
 
@@ -271,23 +398,23 @@ class InputArea {
     this.maxLength = maxLength;
     this.textarea = document.getElementById('input-text');
     this.charCount = document.getElementById('char-count');
-    this.spellSuggestions = document.getElementById('spell-suggestions');
     this.changeCallbacks = [];
-    this.currentError = null;
-    this.selectedIndex = 0;
     this.spellCheckTimer = null;
+    
+    // Initialize spell check UI
+    this.spellUI = new SpellCheckUI(this.textarea, document.getElementById('spell-suggestions'));
+    this.spellUI.onApply = (word, error) => this.applySuggestion(word, error);
     
     this.textarea.addEventListener('input', () => this.handleInput());
     this.textarea.addEventListener('keydown', (e) => this.handleKeyDown(e));
     
-    // Click outside to close
     document.addEventListener('click', (e) => {
-      if (!this.spellSuggestions.contains(e.target) && e.target !== this.textarea) {
-        this.hideSpellSuggestions();
+      const container = document.getElementById('spell-suggestions');
+      if (!container.contains(e.target) && e.target !== this.textarea) {
+        this.spellUI.hide();
       }
     });
     
-    // Load dictionary
     spellChecker.loadDictionary();
   }
   
@@ -295,73 +422,30 @@ class InputArea {
     this.updateCharCount();
     this.changeCallbacks.forEach(cb => cb(this.getText()));
     
-    // Debounce spell check - wait 500ms after user stops typing
     clearTimeout(this.spellCheckTimer);
-    
-    // If text is empty or current error word no longer exists, hide immediately
     const text = this.getText();
+    
     if (!text.trim()) {
-      this.hideSpellSuggestions();
+      this.spellUI.hide();
       return;
     }
     
-    // If current error word was deleted/changed, hide suggestions
-    if (this.currentError) {
-      const currentWord = text.substring(this.currentError.start, this.currentError.end);
-      if (currentWord !== this.currentError.word) {
-        this.hideSpellSuggestions();
+    // Hide if current error word changed
+    if (this.spellUI.currentError) {
+      const currentWord = text.substring(this.spellUI.currentError.start, this.spellUI.currentError.end);
+      if (currentWord !== this.spellUI.currentError.word) {
+        this.spellUI.hide();
       }
     }
     
-    this.spellCheckTimer = setTimeout(() => {
-      this.checkSpelling();
-    }, Config.DEBOUNCE_MS || 500);
+    this.spellCheckTimer = setTimeout(() => this.checkSpelling(), Config.DEBOUNCE_MS || 500);
   }
   
   handleKeyDown(e) {
-    // If suggestions visible, handle navigation
-    const isVisible = this.spellSuggestions.style.display === 'flex';
-    if (isVisible && this.currentError) {
-      const items = this.spellSuggestions.querySelectorAll('.spell-item');
-      if (items.length === 0) return;
-      
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        e.stopPropagation();
-        this.selectedIndex = Math.min(this.selectedIndex + 1, items.length - 1);
-        this.updateSelection(items);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        e.stopPropagation();
-        this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
-        this.updateSelection(items);
-      } else if (e.key === 'Enter' || e.key === 'Tab') {
-        if (items[this.selectedIndex]) {
-          e.preventDefault();
-          e.stopPropagation();
-          this.applySuggestion(items[this.selectedIndex].dataset.word);
-        }
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        this.hideSpellSuggestions();
-      }
+    if (this.spellUI.handleKeyDown(e)) {
+      e.preventDefault();
+      e.stopPropagation();
     }
-  }
-  
-  updateSelection(items) {
-    items.forEach((item, i) => {
-      const isSelected = i === this.selectedIndex;
-      item.style.color = isSelected ? '#a5b4fc' : '#a1a1aa';
-      item.style.background = isSelected ? 'rgba(99, 102, 241, 0.2)' : 'transparent';
-      item.style.borderLeftColor = isSelected ? '#6366f1' : 'transparent';
-      item.style.fontWeight = isSelected ? '500' : '400';
-      
-      if (isSelected) {
-        item.classList.add('selected');
-      } else {
-        item.classList.remove('selected');
-      }
-    });
   }
   
   checkSpelling() {
@@ -370,11 +454,6 @@ class InputArea {
     const text = this.getText();
     if (!text.trim()) return;
     
-    // Find all words and check them
-    const words = text.match(/\b[a-zA-Z]+\b/g);
-    if (!words) return;
-    
-    // Find the last misspelled word
     let lastError = null;
     const wordRegex = /\b[a-zA-Z]+\b/g;
     let match;
@@ -382,187 +461,27 @@ class InputArea {
     while ((match = wordRegex.exec(text)) !== null) {
       const word = match[0];
       if (word.length >= 3 && !spellChecker.isCorrect(word)) {
-        lastError = {
-          word: word,
-          start: match.index,
-          end: match.index + word.length
-        };
+        lastError = { word, start: match.index, end: match.index + word.length };
       }
     }
     
     if (lastError) {
       const suggestions = spellChecker.suggest(lastError.word);
       if (suggestions.length > 0) {
-        this.showSpellSuggestions(lastError.word, lastError.start, suggestions);
+        this.spellUI.show(lastError.word, lastError.start, suggestions);
       }
     }
   }
   
-  showSpellSuggestions(word, wordStart, suggestions) {
-    this.currentError = { word, start: wordStart, end: wordStart + word.length };
-    this.selectedIndex = 0;
-    
-    // Calculate word position using mirror element technique
-    const coords = this.getCaretCoordinates(wordStart);
-    
-    // Build suggestions HTML with inline styles for reliability
-    const itemsHtml = suggestions.map((s, i) => {
-      const isSelected = i === 0;
-      const baseStyle = `
-        display: block;
-        width: 100%;
-        padding: 10px 14px;
-        font-family: inherit;
-        font-size: 14px;
-        color: ${isSelected ? '#a5b4fc' : '#a1a1aa'};
-        background: ${isSelected ? 'rgba(99, 102, 241, 0.2)' : 'transparent'};
-        border: none;
-        border-left: 3px solid ${isSelected ? '#6366f1' : 'transparent'};
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        text-align: left;
-        cursor: pointer;
-        font-weight: ${isSelected ? '500' : '400'};
-      `;
-      return `<button type="button" class="spell-item${isSelected ? ' selected' : ''}" data-word="${s}" style="${baseStyle}">${s}</button>`;
-    }).join('');
-    
-    this.spellSuggestions.innerHTML = `
-      <div style="
-        padding: 10px 14px;
-        font-size: 12px;
-        font-weight: 600;
-        color: #f87171;
-        background: rgba(239, 68, 68, 0.08);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      ">⚠ 「${word}」</div>
-      ${itemsHtml}
-    `;
-    
-    // Apply positioning with full styling
-    this.spellSuggestions.style.cssText = `
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: ${coords.top}px;
-      left: ${coords.left}px;
-      background: linear-gradient(180deg, #1f1f23 0%, #18181b 100%);
-      border: 1px solid rgba(99, 102, 241, 0.4);
-      border-radius: 10px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 10px 20px -2px rgba(0, 0, 0, 0.4);
-      min-width: 180px;
-      max-width: 260px;
-      overflow: hidden;
-      z-index: 99999;
-    `;
-    
-    // Add click and hover handlers
-    const items = this.spellSuggestions.querySelectorAll('.spell-item');
-    items.forEach((item, index) => {
-      item.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.applySuggestion(item.dataset.word);
-      };
-      item.onmouseenter = () => {
-        this.selectedIndex = index;
-        this.updateSelection(items);
-      };
-    });
-  }
-  
-  // Mirror element technique to get caret coordinates in textarea
-  getCaretCoordinates(position) {
-    // Create mirror div
-    const mirror = document.createElement('div');
-    const computed = window.getComputedStyle(this.textarea);
-    
-    // Copy textarea styles to mirror
-    const properties = [
-      'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
-      'letterSpacing', 'textTransform', 'wordSpacing',
-      'textIndent', 'whiteSpace', 'wordWrap', 'wordBreak',
-      'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-      'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
-      'boxSizing', 'lineHeight'
-    ];
-    
-    mirror.style.position = 'absolute';
-    mirror.style.top = '0';
-    mirror.style.left = '-9999px';
-    mirror.style.visibility = 'hidden';
-    mirror.style.whiteSpace = 'pre-wrap';
-    mirror.style.wordWrap = 'break-word';
-    mirror.style.overflow = 'hidden';
-    mirror.style.width = computed.width;
-    
-    properties.forEach(prop => {
-      mirror.style[prop] = computed[prop];
-    });
-    
-    document.body.appendChild(mirror);
-    
-    // Get text up to position
-    const text = this.textarea.value.substring(0, position);
-    mirror.textContent = text;
-    
-    // Add span to mark position
-    const span = document.createElement('span');
-    span.textContent = this.textarea.value.substring(position) || '.';
-    mirror.appendChild(span);
-    
-    // Get coordinates
-    const textareaRect = this.textarea.getBoundingClientRect();
-    const spanRect = span.getBoundingClientRect();
-    const mirrorRect = mirror.getBoundingClientRect();
-    
-    // Calculate relative position within mirror
-    const relativeTop = spanRect.top - mirrorRect.top;
-    const relativeLeft = spanRect.left - mirrorRect.left;
-    
-    // Account for textarea scroll
-    const scrollTop = this.textarea.scrollTop;
-    
-    // Calculate final position (below the word)
-    const lineHeight = parseInt(computed.lineHeight) || 20;
-    const top = textareaRect.top + relativeTop - scrollTop + lineHeight + 4;
-    const left = textareaRect.left + relativeLeft;
-    
-    // Cleanup
-    document.body.removeChild(mirror);
-    
-    // Ensure dropdown stays within viewport
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
-    const dropdownHeight = 200; // approximate
-    const dropdownWidth = 200;
-    
-    return {
-      top: Math.min(top, viewportHeight - dropdownHeight),
-      left: Math.min(Math.max(left, 8), viewportWidth - dropdownWidth)
-    };
-  }
-  
-  hideSpellSuggestions() {
-    this.spellSuggestions.style.display = 'none';
-    this.currentError = null;
-  }
-  
-  applySuggestion(suggestion) {
-    if (!this.currentError) return;
-    
+  applySuggestion(suggestion, error) {
     const text = this.getText();
-    const newText = text.substring(0, this.currentError.start) + 
-                    suggestion + 
-                    text.substring(this.currentError.end);
-    
+    const newText = text.substring(0, error.start) + suggestion + text.substring(error.end);
     this.textarea.value = newText;
     
-    // Move cursor to end of replaced word
-    const newCursorPos = this.currentError.start + suggestion.length;
+    const newCursorPos = error.start + suggestion.length;
     this.textarea.setSelectionRange(newCursorPos, newCursorPos);
     this.textarea.focus();
     
-    this.hideSpellSuggestions();
     this.updateCharCount();
     this.changeCallbacks.forEach(cb => cb(this.getText()));
   }

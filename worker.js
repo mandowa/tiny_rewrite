@@ -47,6 +47,20 @@ export default {
             stream: true
           })
         });
+      } else if (provider === 'qwen') {
+        // Alibaba Qwen (OpenAI-compatible)
+        response = await fetch('https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${env.QWEN_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: messages,
+            stream: true
+          })
+        });
       } else if (provider === 'gemini') {
         // Google Gemini (non-streaming)
         const systemPrompt = messages.find(m => m.role === 'system')?.content || '';

@@ -7,37 +7,13 @@ class ProxyAPIClient {
     this.streamingHandler = new StreamingHandler();
   }
   
-  buildSystemPrompt(style, model) {
-    const basePrompt = Config.STYLES[style]?.systemPrompt || '';
-    
-    // DeepSeek needs much stronger constraints
-    if (model && model.toLowerCase().includes('deepseek')) {
-      return `You are a TEXT REWRITER. You can ONLY rewrite text.
-
-ABSOLUTE RULES:
-1. NEVER answer questions - just rewrite them
-2. NEVER say "I am", "I'm", or refer to yourself
-3. NEVER generate content that wasn't in the input
-4. Output MUST be a rewritten version of the input, nothing else
-5. Keep output length similar to input length
-6. No greetings, signatures, or email templates
-
-Input: "are you an ai agent?"
-Correct output: "Are you an AI agent?"
-WRONG output: "I am an AI agent..." (this answers the question)
-
-Your task: Rewrite this text in ${style} style:`;
-    }
-    
-    return basePrompt;
-  }
-  
   async generateRewrite({ provider, model, inputText, style, onToken, onComplete, onError }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), Config.TIMEOUT_MS);
     
     try {
-      const systemPrompt = this.buildSystemPrompt(style, model);
+      // Use centralized prompt from Config
+      const systemPrompt = Config.getPrompt(model, style);
       const messages = [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: inputText }
@@ -45,14 +21,8 @@ Your task: Rewrite this text in ${style} style:`;
       
       const response = await fetch(this.proxyUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          provider: provider,
-          model: model,
-          messages: messages
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, model, messages }),
         signal: controller.signal
       });
       
@@ -60,51 +30,54 @@ Your task: Rewrite this text in ${style} style:`;
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        // Handle different error formats
-        let errorMessage = `API error: ${response.status}`;
-        if (typeof errorData.error === 'string') {
-          errorMessage = errorData.error;
-        } else if (errorData.error?.message) {
-          errorMessage = errorData.error.message;
-        } else if (errorData.message) {
-          errorMessage = errorData.message;
-        }
-        throw new Error(errorMessage);
+        throw new Error(this.formatError(errorData, response.status));
       }
       
-      if (provider === 'azure') {
-        // Azure returns SSE stream
-        const reader = response.body.getReader();
-        for await (const token of this.streamingHandler.parseSSEStream(reader)) {
-          onToken(token);
-        }
+      if (provider === 'azure' || provider === 'qwen') {
+        await this.handleAzureStream(response, onToken);
       } else if (provider === 'gemini') {
-        // Gemini returns complete response
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        
-        if (text) {
-          // Simulate streaming
-          for (const char of text) {
-            onToken(char);
-            await new Promise(r => setTimeout(r, 5));
-          }
-        }
+        await this.handleGeminiResponse(response, onToken);
       }
       
       onComplete();
     } catch (error) {
       clearTimeout(timeoutId);
-      
-      if (error.name === 'AbortError') {
-        onError(new Error(Config.ERROR_MESSAGES.TIMEOUT));
-      } else if (error.message.includes('fetch')) {
-        onError(new Error(Config.ERROR_MESSAGES.NETWORK_ERROR));
-      } else {
-        onError(error);
-      }
+      onError(this.wrapError(error));
     }
     
     return controller;
+  }
+  
+  async handleAzureStream(response, onToken) {
+    const reader = response.body.getReader();
+    for await (const token of this.streamingHandler.parseSSEStream(reader)) {
+      onToken(token);
+    }
+  }
+  
+  async handleGeminiResponse(response, onToken) {
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (text) {
+      // Emit by words instead of characters for better performance
+      const words = text.split(/(\s+)/);
+      for (const word of words) {
+        onToken(word);
+        await new Promise(r => setTimeout(r, Config.STREAM_DELAY_MS));
+      }
+    }
+  }
+  
+  formatError(errorData, status) {
+    if (typeof errorData.error === 'string') return errorData.error;
+    if (errorData.error?.message) return errorData.error.message;
+    if (errorData.message) return errorData.message;
+    return `API error: ${status}`;
+  }
+  
+  wrapError(error) {
+    if (error.name === 'AbortError') return new Error(Config.ERROR_MESSAGES.TIMEOUT);
+    if (error.message.includes('fetch')) return new Error(Config.ERROR_MESSAGES.NETWORK_ERROR);
+    return error;
   }
 }

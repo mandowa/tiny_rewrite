@@ -6,7 +6,8 @@ const Config = {
   // Providers (used for compatibility, actual keys are in Worker)
   API_PROVIDERS: {
     azure: { name: 'Azure Foundry', type: 'proxy' },
-    gemini: { name: 'Google Gemini', type: 'proxy' }
+    gemini: { name: 'Google Gemini', type: 'proxy' },
+    qwen: { name: 'Alibaba Qwen', type: 'proxy' }
   },
   
   DEFAULT_PROVIDER: 'azure',
@@ -19,23 +20,28 @@ const Config = {
     { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality', provider: 'azure' },
     { id: 'dft-foundry-resource.gpt-4.1', label: 'GPT-4.1', description: 'Balanced', provider: 'azure' },
     { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
-    { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest', provider: 'gemini' }
+    { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest', provider: 'gemini' },
+    { id: 'qwen-plus', label: 'Qwen Plus', description: 'Alibaba AI', provider: 'qwen' }
   ],
   
   DEFAULT_MODELS: {
     azure: 'dft-foundry-resource.gpt-4.1',
-    gemini: 'gemini-2.5-flash-lite'
+    gemini: 'gemini-2.5-flash-lite',
+    qwen: 'qwen-plus'
   },
   
   // Rewrite Styles
   STYLES: {
-    email: {
-      id: 'email',
-      label: 'Email',
-      systemPrompt: `You are a text polishing tool.
-
+    email: { id: 'email', label: 'Email' },
+    teams: { id: 'teams', label: 'Teams' },
+    speaking: { id: 'speaking', label: 'Speaking' }
+  },
+  
+  // Prompts - single source of truth for all models
+  PROMPTS: {
+    default: {
+      email: `You are a text polishing tool.
 TASK: Improve the wording of the input text to sound more professional and polished.
-
 RULES:
 - Output ONLY the improved text
 - Do NOT add greetings like "Hello" or "Dear"
@@ -43,16 +49,9 @@ RULES:
 - Do NOT write a full email - just polish the existing text
 - Do NOT answer questions - just rewrite them
 - Keep the output similar in length to the input
-
-TEXT TO POLISH:`
-    },
-    teams: {
-      id: 'teams',
-      label: 'Teams',
-      systemPrompt: `You are a text rewriting tool.
-
+TEXT TO POLISH:`,
+      teams: `You are a text rewriting tool.
 TASK: Rewrite the input text in casual chat style for Teams/Slack.
-
 RULES:
 - Output ONLY the rewritten text
 - Keep it short and casual
@@ -60,23 +59,45 @@ RULES:
 - Do NOT answer questions - just rewrite them
 - Do NOT use emojis
 - Keep the output similar in length to the input
-
-TEXT TO REWRITE:`
-    },
-    speaking: {
-      id: 'speaking',
-      label: 'Speaking',
-      systemPrompt: `You are a text rewriting tool.
-
+TEXT TO REWRITE:`,
+      speaking: `You are a text rewriting tool.
 TASK: Rewrite the input text so it sounds natural when spoken aloud.
-
 RULES:
 - Output ONLY the rewritten text
 - Make it easy to say out loud
 - Do NOT answer questions - just rewrite them
 - Keep the output similar in length to the input
-
 TEXT TO REWRITE:`
+    },
+    // DeepSeek needs stronger constraints
+    deepseek: {
+      email: `You are a TEXT REWRITER. You can ONLY rewrite text.
+ABSOLUTE RULES:
+1. NEVER answer questions - just rewrite them
+2. NEVER say "I am", "I'm", or refer to yourself
+3. NEVER generate content that wasn't in the input
+4. Output MUST be a rewritten version of the input, nothing else
+5. No greetings, signatures, or email templates
+Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
+TASK: Polish this text professionally:`,
+      teams: `You are a TEXT REWRITER. You can ONLY rewrite text.
+ABSOLUTE RULES:
+1. NEVER answer questions - just rewrite them
+2. NEVER say "I am", "I'm", or refer to yourself
+3. NEVER generate content that wasn't in the input
+4. Output MUST be a rewritten version of the input, nothing else
+5. Keep it casual for chat
+Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
+TASK: Rewrite casually:`,
+      speaking: `You are a TEXT REWRITER. You can ONLY rewrite text.
+ABSOLUTE RULES:
+1. NEVER answer questions - just rewrite them
+2. NEVER say "I am", "I'm", or refer to yourself
+3. NEVER generate content that wasn't in the input
+4. Output MUST be a rewritten version of the input, nothing else
+5. Make it easy to speak aloud
+Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
+TASK: Rewrite for speaking:`
     }
   },
   
@@ -112,3 +133,10 @@ Config.MODELS = Config.ALL_MODELS.reduce((acc, model) => {
   acc[model.provider].push({ id: model.id, label: model.label, description: model.description });
   return acc;
 }, {});
+
+// Helper: Get prompt for model and style
+Config.getPrompt = function(model, style) {
+  const isDeepSeek = model && model.toLowerCase().includes('deepseek');
+  const promptSet = isDeepSeek ? Config.PROMPTS.deepseek : Config.PROMPTS.default;
+  return promptSet[style] || promptSet.teams;
+};
