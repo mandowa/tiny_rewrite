@@ -820,18 +820,32 @@ class App {
   constructor() {
     // Initialize services
     this.validationService = new ValidationService();
-    this.currentProvider = this.getInitialProvider();
-    this.apiClient = this.createAPIClient(this.currentProvider);
+    
+    // Check if using proxy (production) or direct API (development)
+    if (typeof Config.API_PROXY !== 'undefined' && typeof ProxyAPIClient !== 'undefined') {
+      // Production mode: use proxy
+      this.apiClient = new ProxyAPIClient(Config.API_PROXY);
+      this.useProxy = true;
+      console.log('Using API Proxy:', Config.API_PROXY);
+    } else {
+      // Development mode: direct API calls
+      this.currentProvider = this.getInitialProvider();
+      this.apiClient = this.createAPIClient(this.currentProvider);
+      this.useProxy = false;
+      console.log('Using Direct API');
+    }
     
     // Initialize state
     this.state = new AppState();
-    this.state.setSelectedModel(Config.DEFAULT_MODELS[this.currentProvider]);
+    this.state.setSelectedModel(Config.DEFAULT_MODELS[this.useProxy ? 'azure' : this.currentProvider]);
     
     // Initialize components
     this.inputArea = new InputArea(Config.MAX_INPUT_LENGTH);
     this.providerSelector = document.getElementById('provider-selector');
-    this.providerSelector.value = this.currentProvider;
-    this.modelSelector = new ModelSelector(Config.MODELS[this.currentProvider]);
+    if (!this.useProxy) {
+      this.providerSelector.value = this.currentProvider;
+    }
+    this.modelSelector = new ModelSelector(Config.MODELS[this.useProxy ? 'azure' : this.currentProvider]);
     this.rewriteDisplays = {
       email: new RewriteDisplay('email'),
       teams: new RewriteDisplay('teams'),
@@ -846,13 +860,17 @@ class App {
     
     // Load saved preferences
     this.loadStylePreferences();
-    this.loadProviderPreference();
+    if (!this.useProxy) {
+      this.loadProviderPreference();
+    }
     
     // Populate model selector
     this.updateModelSelector();
 
     // Warn (but don't abort) if provider config is missing.
-    this.warnIfProviderNotConfigured(this.currentProvider);
+    if (!this.useProxy) {
+      this.warnIfProviderNotConfigured(this.currentProvider);
+    }
     
     // Debounce timer
     this.debounceTimer = null;
@@ -1086,7 +1104,7 @@ class App {
     display.startStreaming();
     
     return new Promise((resolve) => {
-      this.apiClient.generateRewrite({
+      const params = {
         model: this.state.selectedModel,
         inputText: this.state.inputText,
         style: style,
@@ -1103,7 +1121,14 @@ class App {
           display.showError(error.message || Config.ERROR_MESSAGES.API_ERROR);
           resolve();
         }
-      });
+      };
+      
+      // Add provider if using proxy
+      if (this.useProxy) {
+        params.provider = this.currentProvider || 'azure';
+      }
+      
+      this.apiClient.generateRewrite(params);
     });
   }
   

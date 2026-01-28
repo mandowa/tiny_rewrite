@@ -1,6 +1,9 @@
 # API Keys - DO NOT COMMIT
 config.js
 
+# Keep development version locally
+index.html
+
 # Python
 __pycache__/
 *.py[cod]
