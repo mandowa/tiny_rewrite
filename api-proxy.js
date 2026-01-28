@@ -22,13 +22,6 @@ class ProxyAPIClient {
         { role: 'user', content: inputText }
       ];
       
-      console.log('API Request (Proxy):', {
-        proxy: this.proxyUrl,
-        provider: provider,
-        model: model,
-        style: style
-      });
-      
       const response = await fetch(this.proxyUrl, {
         method: 'POST',
         headers: {

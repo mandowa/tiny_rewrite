@@ -162,12 +162,6 @@ class APIClient {
         stream: true
       };
       
-      console.log('API Request (OpenAI):', {
-        endpoint: this.endpoint,
-        model: model,
-        style: style
-      });
-      
       const response = await fetch(this.endpoint, {
         method: 'POST',
         headers: {
@@ -218,12 +212,6 @@ class APIClient {
       
       // Use non-streaming endpoint for reliability
       const endpoint = `${this.endpoint}/${model}:generateContent?key=${this.apiKey}`;
-      
-      console.log('API Request (Gemini):', {
-        endpoint: endpoint.replace(this.apiKey, 'API_KEY'),
-        model: model,
-        style: style
-      });
       
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -827,13 +815,11 @@ class App {
       this.apiClient = new ProxyAPIClient(Config.API_PROXY);
       this.useProxy = true;
       this.currentProvider = Config.DEFAULT_PROVIDER || 'azure'; // Set default provider for proxy mode
-      console.log('Using API Proxy:', Config.API_PROXY);
     } else {
       // Development mode: direct API calls
       this.currentProvider = this.getInitialProvider();
       this.apiClient = this.createAPIClient(this.currentProvider);
       this.useProxy = false;
-      console.log('Using Direct API');
     }
     
     // Initialize state
