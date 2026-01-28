@@ -515,6 +515,7 @@ class InputArea {
   
   setMaxLength(newLimit) {
     this.maxLength = newLimit;
+    this.textarea.setAttribute('maxlength', newLimit);
     this.updateCharCount();
   }
   
