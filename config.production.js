@@ -27,7 +27,7 @@ const Config = {
   },
   
   DEFAULT_MODELS: {
-    azure: 'dft-foundry-resource.gpt-5-mini',
+    azure: 'dft-foundry-resource.gpt-4.1',
     gemini: 'gemini-2.5-flash-lite'
   },
   
