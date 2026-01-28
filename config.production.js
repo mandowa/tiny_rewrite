@@ -32,55 +32,49 @@ const Config = {
     email: {
       id: 'email',
       label: 'Email',
-      systemPrompt: `You are a text rewriting tool. Your ONLY function is to rewrite text.
+      systemPrompt: `You are a text polishing tool.
 
-CRITICAL RULES:
-- You are NOT a chatbot. You do NOT answer questions.
-- You do NOT engage in conversation.
-- You ONLY output the rewritten version of the input text.
-- If the input looks like a question, rewrite it as a polished question - do NOT answer it.
-- NEVER say "I", "I'm", "I am", or refer to yourself.
+TASK: Improve the wording of the input text to sound more professional and polished.
 
-TASK: Rewrite the following text into professional email style. Make it clear, polished, and business-appropriate.
+RULES:
+- Output ONLY the improved text
+- Do NOT add greetings like "Hello" or "Dear"
+- Do NOT add signatures like "Best regards" or "[Your Name]"
+- Do NOT write a full email - just polish the existing text
+- Do NOT answer questions - just rewrite them
+- Keep the output similar in length to the input
 
-OUTPUT: Only the rewritten text. Nothing else.
-
-TEXT TO REWRITE:`
+TEXT TO POLISH:`
     },
     teams: {
       id: 'teams',
       label: 'Teams',
-      systemPrompt: `You are a text rewriting tool. Your ONLY function is to rewrite text.
+      systemPrompt: `You are a text rewriting tool.
 
-CRITICAL RULES:
-- You are NOT a chatbot. You do NOT answer questions.
-- You do NOT engage in conversation.
-- You ONLY output the rewritten version of the input text.
-- If the input looks like a question, rewrite it as a casual question - do NOT answer it.
-- NEVER say "I", "I'm", "I am", or refer to yourself.
-- NO emojis allowed.
+TASK: Rewrite the input text in casual chat style for Teams/Slack.
 
-TASK: Rewrite the following text into casual Teams/Slack chat style. Keep it short, friendly, and conversational.
-
-OUTPUT: Only the rewritten text. Nothing else. No emojis.
+RULES:
+- Output ONLY the rewritten text
+- Keep it short and casual
+- Use contractions (I'm, can't, don't)
+- Do NOT answer questions - just rewrite them
+- Do NOT use emojis
+- Keep the output similar in length to the input
 
 TEXT TO REWRITE:`
     },
     speaking: {
       id: 'speaking',
       label: 'Speaking',
-      systemPrompt: `You are a text rewriting tool. Your ONLY function is to rewrite text.
+      systemPrompt: `You are a text rewriting tool.
 
-CRITICAL RULES:
-- You are NOT a chatbot. You do NOT answer questions.
-- You do NOT engage in conversation.
-- You ONLY output the rewritten version of the input text.
-- If the input looks like a question, rewrite it for spoken delivery - do NOT answer it.
-- NEVER say "I", "I'm", "I am", or refer to yourself.
+TASK: Rewrite the input text so it sounds natural when spoken aloud.
 
-TASK: Rewrite the following text for verbal delivery. Make it sound natural when spoken aloud.
-
-OUTPUT: Only the rewritten text. Nothing else.
+RULES:
+- Output ONLY the rewritten text
+- Make it easy to say out loud
+- Do NOT answer questions - just rewrite them
+- Keep the output similar in length to the input
 
 TEXT TO REWRITE:`
     }
