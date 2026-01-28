@@ -48,12 +48,26 @@ export default {
           })
         });
       } else if (provider === 'qwen') {
-        // Alibaba Qwen (OpenAI-compatible)
-        response = await fetch('https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', {
+        // Alibaba Qwen (OpenAI-compatible) - International endpoint
+        response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${env.QWEN_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: messages,
+            stream: true
+          })
+        });
+      } else if (provider === 'nvidia') {
+        // NVIDIA NIM (OpenAI-compatible)
+        response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${env.NVIDIA_API_KEY}`
           },
           body: JSON.stringify({
             model: model,

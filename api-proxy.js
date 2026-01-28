@@ -33,7 +33,7 @@ class ProxyAPIClient {
         throw new Error(this.formatError(errorData, response.status));
       }
       
-      if (provider === 'azure' || provider === 'qwen') {
+      if (provider === 'azure' || provider === 'qwen' || provider === 'nvidia') {
         await this.handleAzureStream(response, onToken);
       } else if (provider === 'gemini') {
         await this.handleGeminiResponse(response, onToken);
