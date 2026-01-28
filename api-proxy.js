@@ -10,16 +10,23 @@ class ProxyAPIClient {
   buildSystemPrompt(style, model) {
     const basePrompt = Config.STYLES[style]?.systemPrompt || '';
     
-    // DeepSeek needs extra constraints to avoid generating full email templates
+    // DeepSeek needs much stronger constraints
     if (model && model.toLowerCase().includes('deepseek')) {
-      const deepseekSuffix = `
+      return `You are a TEXT REWRITER. You can ONLY rewrite text.
 
-IMPORTANT FOR THIS MODEL:
-- Do NOT write a full email with greeting/signature
-- Do NOT add [Recipient's Name] or [Your Name] placeholders
-- Just improve the wording of the input text
-- Keep the output similar in length to the input`;
-      return basePrompt + deepseekSuffix;
+ABSOLUTE RULES:
+1. NEVER answer questions - just rewrite them
+2. NEVER say "I am", "I'm", or refer to yourself
+3. NEVER generate content that wasn't in the input
+4. Output MUST be a rewritten version of the input, nothing else
+5. Keep output length similar to input length
+6. No greetings, signatures, or email templates
+
+Input: "are you an ai agent?"
+Correct output: "Are you an AI agent?"
+WRONG output: "I am an AI agent..." (this answers the question)
+
+Your task: Rewrite this text in ${style} style:`;
     }
     
     return basePrompt;
