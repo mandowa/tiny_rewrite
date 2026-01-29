@@ -410,10 +410,21 @@
     // Fix iOS scroll jump when focusing textarea
     const textarea = document.getElementById('input-text');
     if (textarea) {
+      let scrollTimeout;
       textarea.addEventListener('focus', (e) => {
         // iOS Safari doesn't scroll when element has opacity 0
         textarea.style.opacity = 0;
-        setTimeout(() => textarea.style.opacity = 1);
+        setTimeout(() => {
+          textarea.style.opacity = 1;
+          // After keyboard appears, scroll textarea into view
+          scrollTimeout = setTimeout(() => {
+            textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        });
+      });
+      
+      textarea.addEventListener('blur', () => {
+        clearTimeout(scrollTimeout);
       });
     }
   </script>
