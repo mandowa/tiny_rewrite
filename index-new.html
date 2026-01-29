@@ -162,14 +162,14 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
-  <div class="max-w-6xl mx-auto px-6 py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12">
     <!-- Header -->
-    <header class="flex items-center justify-between mb-16 flex-wrap gap-4">
-      <div class="flex items-center gap-6 lg:gap-10 flex-wrap">
-        <div class="flex items-center gap-4 group cursor-pointer">
-          <div class="relative w-12 h-12 flex items-center justify-center glow-logo transition-transform duration-500 group-hover:scale-110">
+    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-10 lg:mb-16 gap-4">
+      <div class="flex items-center gap-3 sm:gap-6 lg:gap-10 flex-wrap">
+        <div class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
+          <div class="relative w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 flex items-center justify-center glow-logo transition-transform duration-500 group-hover:scale-110">
             <div class="absolute inset-0 bg-blue-500/20 blur-xl rounded-full"></div>
-            <svg fill="none" height="48" viewBox="0 0 32 32" width="48" xmlns="http://www.w3.org/2000/svg">
+            <svg fill="none" class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <rect fill="url(#grad1)" fill-opacity="0.9" height="18" rx="4" width="14" x="14" y="4"></rect>
               <rect fill="#3b82f6" height="10" rx="2" transform="rotate(-15 4 10)" width="10" x="4" y="10"></rect>
               <rect fill="#3b82f6" height="8" rx="2" transform="rotate(10 6 18)" width="8" x="6" y="18"></rect>
@@ -181,25 +181,20 @@
               </defs>
             </svg>
           </div>
-          <h1 class="text-3xl lg:text-4xl font-black tracking-tighter text-slate-900 dark:text-white glow-logo">flusynt</h1>
+          <h1 class="text-xl sm:text-2xl lg:text-4xl font-black tracking-tighter text-slate-900 dark:text-white glow-logo">flusynt</h1>
         </div>
-        <div class="hidden lg:flex items-center border-l border-white/10 pl-10 h-10">
-          <div class="text-lg font-medium text-slate-400 flex items-center min-w-[200px]">
-            <span class="spell-animation text-gradient-brand font-bold tracking-tight"></span><span class="cursor"></span>
-          </div>
-        </div>
-        <span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm">Beta</span>
+        <span class="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[9px] sm:text-[11px] font-bold tracking-[0.2em] uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm">Beta</span>
       </div>
       
       <!-- Model Selector -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 w-full sm:w-auto">
         <select id="provider-selector" class="hidden">
           <option value="azure">Azure Foundry</option>
           <option value="gemini">Google Gemini</option>
         </select>
-        <div class="glass px-4 py-2.5 rounded-2xl flex items-center gap-3 hover:bg-white/10 transition-all border border-white/10 group">
+        <div class="glass flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl flex items-center gap-2 sm:gap-3 hover:bg-white/10 transition-all border border-white/10 group">
           <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-          <select id="model-selector" class="bg-transparent border-none text-sm font-medium text-slate-300 focus:outline-none focus:ring-0 cursor-pointer pr-6 appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22><path fill=%22%2394a3b8%22 d=%22M2 4l4 4 4-4%22/></svg>'); background-repeat: no-repeat; background-position: right 0 center;">
+          <select id="model-selector" class="flex-1 bg-transparent border-none text-xs sm:text-sm font-medium text-slate-300 focus:outline-none focus:ring-0 cursor-pointer pr-4 sm:pr-6 appearance-none" style="background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 12 12%22><path fill=%22%2394a3b8%22 d=%22M2 4l4 4 4-4%22/></svg>'); background-repeat: no-repeat; background-position: right 0 center;">
             <option value="dft-foundry-resource.gpt-5-mini">GPT-5 Mini</option>
           </select>
         </div>
@@ -207,58 +202,58 @@
     </header>
 
     <!-- Main Input -->
-    <main class="relative mb-12">
-      <div class="input-glow glass rounded-[2rem] p-2 transition-all duration-700">
+    <main class="relative mb-8 lg:mb-12">
+      <div class="input-glow glass rounded-2xl lg:rounded-[2rem] p-2 transition-all duration-700">
         <textarea 
           id="input-text"
-          class="w-full h-48 lg:h-64 bg-transparent border-none focus:ring-0 text-xl lg:text-2xl placeholder-slate-500 dark:placeholder-slate-600 p-6 lg:p-10 resize-none text-slate-800 dark:text-slate-200 leading-relaxed font-light"
+          class="w-full h-32 sm:h-40 lg:h-56 bg-transparent border-none focus:ring-0 text-base sm:text-lg lg:text-2xl placeholder-slate-500 dark:placeholder-slate-600 p-4 sm:p-6 lg:p-10 resize-none text-slate-800 dark:text-slate-200 leading-relaxed font-light"
           placeholder="Type or paste your text here..."
           maxlength="200"
           spellcheck="false"
         ></textarea>
         
-        <div class="flex items-center justify-between p-4 lg:p-6 pt-0 flex-wrap gap-4">
-          <!-- Style Chips -->
-          <div class="flex bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl gap-1 border border-white/5">
-            <button id="style-email-btn" data-chip="email" class="style-chip px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl text-sm font-semibold flex items-center gap-2">
-              <span class="material-symbols-outlined text-lg">mail</span>
-              Email
-            </button>
-            <button id="style-teams-btn" data-chip="teams" class="style-chip active px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl text-sm font-semibold flex items-center gap-2">
-              <span class="material-symbols-outlined text-lg">groups</span>
-              Teams
-            </button>
-            <button id="style-speaking-btn" data-chip="speaking" class="style-chip px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl text-sm font-semibold flex items-center gap-2">
-              <span class="material-symbols-outlined text-lg">mic</span>
-              Speaking
-            </button>
+        <div class="flex flex-col gap-3 p-4 lg:p-6 pt-0">
+          <!-- Row 1: Style Chips + Char count -->
+          <div class="flex items-center justify-between">
+            <div class="flex bg-slate-100 dark:bg-white/5 p-1 rounded-xl gap-0.5 border border-white/5">
+              <button id="style-email-btn" data-chip="email" class="style-chip px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base">mail</span>
+                <span class="hidden sm:inline">Email</span>
+              </button>
+              <button id="style-teams-btn" data-chip="teams" class="style-chip active px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base">groups</span>
+                <span class="hidden sm:inline">Teams</span>
+              </button>
+              <button id="style-speaking-btn" data-chip="speaking" class="style-chip px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base">mic</span>
+                <span class="hidden sm:inline">Speaking</span>
+              </button>
+            </div>
+            <span id="char-count" class="text-xs text-slate-500 font-medium tabular-nums">0 / 200</span>
           </div>
           
-          <!-- Char count & Rewrite button -->
-          <div class="flex items-center gap-4">
-            <span id="char-count" class="text-xs text-slate-500 font-medium tabular-nums">0 / 200</span>
-            <button id="rewrite-btn" class="rewrite-btn px-6 lg:px-10 py-3 lg:py-4 rounded-[1.5rem] text-white font-bold flex items-center gap-3 shadow-xl text-base lg:text-lg" disabled>
-              <span class="material-symbols-outlined text-xl lg:text-2xl">auto_fix_high</span>
-              Rewrite
-            </button>
-          </div>
+          <!-- Row 2: Rewrite button (full width on mobile) -->
+          <button id="rewrite-btn" class="rewrite-btn w-full sm:w-auto sm:self-end px-6 py-3 rounded-2xl text-white font-bold flex items-center justify-center gap-2 shadow-xl text-sm" disabled>
+            <span class="material-symbols-outlined text-lg">auto_fix_high</span>
+            Rewrite
+          </button>
         </div>
       </div>
     </main>
 
     <!-- Results Section -->
-    <section id="results-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+    <section id="results-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
       <!-- Email Card -->
-      <article class="result-card card p-6 lg:p-8 rounded-[2rem] flex flex-col gap-4 lg:gap-6 group hover:border-blue-500/40 transition-all duration-500" id="card-email" data-style="email" data-card="email">
+      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-blue-500/40 transition-all duration-500" id="card-email" data-style="email" data-card="email">
         <div class="card-header flex items-center justify-between">
-          <div class="card-title flex items-center gap-3 text-blue-400">
-            <div class="p-2 bg-blue-500/10 rounded-xl">
-              <span class="material-symbols-outlined text-xl lg:text-2xl">mail</span>
+          <div class="card-title flex items-center gap-2 sm:gap-3 text-blue-400">
+            <div class="p-1.5 sm:p-2 bg-blue-500/10 rounded-lg sm:rounded-xl">
+              <span class="material-symbols-outlined text-lg sm:text-xl lg:text-2xl">mail</span>
             </div>
-            <span class="text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Email</span>
+            <span class="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Email</span>
           </div>
-          <button class="btn-icon copy-btn p-2 rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Copy">
-            <span class="material-symbols-outlined text-lg lg:text-xl">content_copy</span>
+          <button class="btn-icon copy-btn p-1.5 sm:p-2 rounded-lg sm:rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Copy">
+            <span class="material-symbols-outlined text-base sm:text-lg lg:text-xl">content_copy</span>
           </button>
         </div>
         <div class="card-body flex-1">
@@ -266,23 +261,23 @@
             <div class="spinner"></div>
             <span class="text-sm">Generating...</span>
           </div>
-          <p class="rewrite-text text-base lg:text-lg leading-[1.85] font-normal text-slate-100 dark:text-white/95"></p>
-          <div class="error-message hidden text-sm text-red-400 bg-red-500/10 p-3 rounded-xl"></div>
-          <p class="placeholder-text text-slate-500 italic">Professional email version</p>
+          <p class="rewrite-text text-sm sm:text-base lg:text-lg leading-relaxed lg:leading-[1.85] font-normal text-slate-100 dark:text-white/95"></p>
+          <div class="error-message hidden text-xs sm:text-sm text-red-400 bg-red-500/10 p-2 sm:p-3 rounded-lg sm:rounded-xl"></div>
+          <p class="placeholder-text text-sm text-slate-500 italic">Professional email version</p>
         </div>
       </article>
 
       <!-- Teams Card -->
-      <article class="result-card card p-6 lg:p-8 rounded-[2rem] flex flex-col gap-4 lg:gap-6 group hover:border-purple-500/40 transition-all duration-500" id="card-teams" data-style="teams" data-card="teams">
+      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-purple-500/40 transition-all duration-500" id="card-teams" data-style="teams" data-card="teams">
         <div class="card-header flex items-center justify-between">
-          <div class="card-title flex items-center gap-3 text-purple-400">
-            <div class="p-2 bg-purple-500/10 rounded-xl">
-              <span class="material-symbols-outlined text-xl lg:text-2xl">groups</span>
+          <div class="card-title flex items-center gap-2 sm:gap-3 text-purple-400">
+            <div class="p-1.5 sm:p-2 bg-purple-500/10 rounded-lg sm:rounded-xl">
+              <span class="material-symbols-outlined text-lg sm:text-xl lg:text-2xl">groups</span>
             </div>
-            <span class="text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Teams</span>
+            <span class="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Teams</span>
           </div>
-          <button class="btn-icon copy-btn p-2 rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Copy">
-            <span class="material-symbols-outlined text-lg lg:text-xl">content_copy</span>
+          <button class="btn-icon copy-btn p-1.5 sm:p-2 rounded-lg sm:rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Copy">
+            <span class="material-symbols-outlined text-base sm:text-lg lg:text-xl">content_copy</span>
           </button>
         </div>
         <div class="card-body flex-1">
@@ -290,27 +285,27 @@
             <div class="spinner"></div>
             <span class="text-sm">Generating...</span>
           </div>
-          <p class="rewrite-text text-base lg:text-lg leading-[1.85] font-normal text-slate-100 dark:text-white/95"></p>
-          <div class="error-message hidden text-sm text-red-400 bg-red-500/10 p-3 rounded-xl"></div>
-          <p class="placeholder-text text-slate-500 italic">Casual chat version</p>
+          <p class="rewrite-text text-sm sm:text-base lg:text-lg leading-relaxed lg:leading-[1.85] font-normal text-slate-100 dark:text-white/95"></p>
+          <div class="error-message hidden text-xs sm:text-sm text-red-400 bg-red-500/10 p-2 sm:p-3 rounded-lg sm:rounded-xl"></div>
+          <p class="placeholder-text text-sm text-slate-500 italic">Casual chat version</p>
         </div>
       </article>
 
       <!-- Speaking Card -->
-      <article class="result-card card p-6 lg:p-8 rounded-[2rem] flex flex-col gap-4 lg:gap-6 group hover:border-sky-400/40 transition-all duration-500" id="card-speaking" data-style="speaking" data-card="speaking">
+      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-sky-400/40 transition-all duration-500 sm:col-span-2 lg:col-span-1" id="card-speaking" data-style="speaking" data-card="speaking">
         <div class="card-header flex items-center justify-between">
-          <div class="card-title flex items-center gap-3 text-sky-400">
-            <div class="p-2 bg-sky-500/10 rounded-xl">
-              <span class="material-symbols-outlined text-xl lg:text-2xl">mic</span>
+          <div class="card-title flex items-center gap-2 sm:gap-3 text-sky-400">
+            <div class="p-1.5 sm:p-2 bg-sky-500/10 rounded-lg sm:rounded-xl">
+              <span class="material-symbols-outlined text-lg sm:text-xl lg:text-2xl">mic</span>
             </div>
-            <span class="text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Speaking</span>
+            <span class="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Speaking</span>
           </div>
           <div class="card-actions flex gap-1">
-            <button class="btn-icon play-btn p-2 rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Play">
-              <span class="material-symbols-outlined text-lg lg:text-xl play-icon">volume_up</span>
+            <button class="btn-icon play-btn p-1.5 sm:p-2 rounded-lg sm:rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Play">
+              <span class="material-symbols-outlined text-base sm:text-lg lg:text-xl play-icon">volume_up</span>
             </button>
-            <button class="btn-icon copy-btn p-2 rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Copy">
-              <span class="material-symbols-outlined text-lg lg:text-xl">content_copy</span>
+            <button class="btn-icon copy-btn p-1.5 sm:p-2 rounded-lg sm:rounded-xl hover:bg-white/10 text-slate-400 transition-colors" aria-label="Copy">
+              <span class="material-symbols-outlined text-base sm:text-lg lg:text-xl">content_copy</span>
             </button>
           </div>
         </div>
@@ -319,16 +314,16 @@
             <div class="spinner"></div>
             <span class="text-sm">Generating...</span>
           </div>
-          <p class="rewrite-text text-base lg:text-lg leading-[1.85] font-normal text-slate-100 dark:text-white/95"></p>
-          <div class="error-message hidden text-sm text-red-400 bg-red-500/10 p-3 rounded-xl"></div>
-          <p class="placeholder-text text-slate-500 italic">Spoken version</p>
+          <p class="rewrite-text text-sm sm:text-base lg:text-lg leading-relaxed lg:leading-[1.85] font-normal text-slate-100 dark:text-white/95"></p>
+          <div class="error-message hidden text-xs sm:text-sm text-red-400 bg-red-500/10 p-2 sm:p-3 rounded-lg sm:rounded-xl"></div>
+          <p class="placeholder-text text-sm text-slate-500 italic">Spoken version</p>
         </div>
       </article>
     </section>
 
     <!-- Footer -->
-    <footer class="mt-12 text-center">
-      <span class="text-xs text-slate-500">Press <kbd class="px-2 py-1 bg-white/5 rounded border border-white/10 text-slate-400">⌘</kbd> + <kbd class="px-2 py-1 bg-white/5 rounded border border-white/10 text-slate-400">Enter</kbd> to rewrite</span>
+    <footer class="mt-8 lg:mt-12 text-center">
+      <span class="text-[10px] sm:text-xs text-slate-500">Press <kbd class="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/5 rounded border border-white/10 text-slate-400">⌘</kbd> + <kbd class="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-white/5 rounded border border-white/10 text-slate-400">Enter</kbd> to rewrite</span>
     </footer>
   </div>
 
