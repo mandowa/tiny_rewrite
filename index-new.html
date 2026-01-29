@@ -390,6 +390,45 @@
       opt.style.backgroundColor = '#1a1c23';
       opt.style.color = '#e2e8f0';
     });
+
+    // Fix mobile keyboard viewport issue (LinkedIn approach)
+    const visualViewport = window.visualViewport;
+    if (visualViewport) {
+      const container = document.querySelector('.max-w-6xl');
+      let viewportHeight = window.innerHeight;
+      let offset = 0;
+
+      const handleScrollToTop = () => {
+        window.scrollTo(0, 0);
+      };
+
+      visualViewport.addEventListener('resize', (event) => {
+        const target = event.target;
+        
+        // Keyboard opened (height decreased significantly)
+        if (viewportHeight - target.height > 150) {
+          handleScrollToTop();
+          const adjustment = viewportHeight - target.height - offset;
+          if (container) {
+            container.style.paddingBottom = `${adjustment}px`;
+          }
+        } 
+        // Keyboard closed or minimal change
+        else if (viewportHeight === target.height || viewportHeight - target.height <= 150) {
+          offset = viewportHeight - target.height;
+          if (container) {
+            container.style.paddingBottom = '0px';
+          }
+        }
+      });
+
+      // Scroll to top on touch end to keep content visible
+      document.addEventListener('touchend', (e) => {
+        if (document.activeElement && document.activeElement.tagName === 'TEXTAREA') {
+          setTimeout(handleScrollToTop, 50);
+        }
+      });
+    }
   </script>
 </body>
 </html>
