@@ -44,17 +44,13 @@ const Config = {
   // Prompts - single source of truth for all models
   PROMPTS: {
     default: {
-      email: `You are a text polishing tool.
-TASK: Improve the wording of the input text to sound more professional and polished.
-RULES:
-- Output ONLY the improved text in English
-- If input is in Chinese or other non-English language, translate to English first then polish
-- Do NOT add greetings like "Hello" or "Dear"
-- Do NOT add signatures like "Best regards" or "[Your Name]"
-- Do NOT write a full email - just polish the existing text
-- Do NOT answer questions - just rewrite them
-- Keep the output similar in length to the input
-TEXT TO POLISH:`,
+      email: `Role: Business English Editor
+Task: Rewrite the provided draft text into polished English suitable for internal business correspondence.
+Constraints:
+1. Maintain a professional yet natural tone—avoid sounding overly formal, stiff, or robotic.
+2. Output ONLY the rewritten sentence(s). Do not add greetings, sign-offs, or email formatting.
+3. If input is in Chinese or other non-English language, translate to English first then polish.
+Input text:`,
       teams: `You are a text rewriting tool.
 TASK: Rewrite the input text in casual chat style for Teams/Slack.
 RULES:
