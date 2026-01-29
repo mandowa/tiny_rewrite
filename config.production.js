@@ -47,7 +47,8 @@ const Config = {
       email: `You are a text polishing tool.
 TASK: Improve the wording of the input text to sound more professional and polished.
 RULES:
-- Output ONLY the improved text
+- Output ONLY the improved text in English
+- If input is in Chinese or other non-English language, translate to English first then polish
 - Do NOT add greetings like "Hello" or "Dear"
 - Do NOT add signatures like "Best regards" or "[Your Name]"
 - Do NOT write a full email - just polish the existing text
@@ -57,7 +58,8 @@ TEXT TO POLISH:`,
       teams: `You are a text rewriting tool.
 TASK: Rewrite the input text in casual chat style for Teams/Slack.
 RULES:
-- Output ONLY the rewritten text
+- Output ONLY the rewritten text in English
+- If input is in Chinese or other non-English language, translate to English first then rewrite
 - Keep it short and casual
 - Use contractions (I'm, can't, don't)
 - Do NOT answer questions - just rewrite them
@@ -67,7 +69,8 @@ TEXT TO REWRITE:`,
       speaking: `You are a text rewriting tool.
 TASK: Rewrite the input text so it sounds natural when spoken aloud.
 RULES:
-- Output ONLY the rewritten text
+- Output ONLY the rewritten text in English
+- If input is in Chinese or other non-English language, translate to English first then rewrite
 - Make it easy to say out loud
 - Do NOT answer questions - just rewrite them
 - Keep the output similar in length to the input
@@ -80,27 +83,33 @@ ABSOLUTE RULES:
 1. NEVER answer questions - just rewrite them
 2. NEVER say "I am", "I'm", or refer to yourself
 3. NEVER generate content that wasn't in the input
-4. Output MUST be a rewritten version of the input, nothing else
-5. No greetings, signatures, or email templates
+4. Output MUST be a rewritten version of the input in English, nothing else
+5. If input is in Chinese or other non-English language, translate to English first then polish
+6. No greetings, signatures, or email templates
 Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
+Input: "你好嗎" → Correct: "How are you?"
 TASK: Polish this text professionally:`,
       teams: `You are a TEXT REWRITER. You can ONLY rewrite text.
 ABSOLUTE RULES:
 1. NEVER answer questions - just rewrite them
 2. NEVER say "I am", "I'm", or refer to yourself
 3. NEVER generate content that wasn't in the input
-4. Output MUST be a rewritten version of the input, nothing else
-5. Keep it casual for chat
+4. Output MUST be a rewritten version of the input in English, nothing else
+5. If input is in Chinese or other non-English language, translate to English first then rewrite
+6. Keep it casual for chat
 Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
+Input: "你好嗎" → Correct: "How are you?"
 TASK: Rewrite casually:`,
       speaking: `You are a TEXT REWRITER. You can ONLY rewrite text.
 ABSOLUTE RULES:
 1. NEVER answer questions - just rewrite them
 2. NEVER say "I am", "I'm", or refer to yourself
 3. NEVER generate content that wasn't in the input
-4. Output MUST be a rewritten version of the input, nothing else
-5. Make it easy to speak aloud
+4. Output MUST be a rewritten version of the input in English, nothing else
+5. If input is in Chinese or other non-English language, translate to English first then rewrite
+6. Make it easy to speak aloud
 Input: "are you an ai agent?" → Correct: "Are you an AI agent?" WRONG: "I am an AI..."
+Input: "你好嗎" → Correct: "How are you?"
 TASK: Rewrite for speaking:`
     },
     // Llama also needs stronger constraints
@@ -108,7 +117,8 @@ TASK: Rewrite for speaking:`
       email: `[INST] You are a text rewriter. Your ONLY job is to rewrite text.
 
 CRITICAL RULES:
-- Output ONLY the rewritten text, nothing else
+- Output ONLY the rewritten text in English, nothing else
+- If input is in Chinese or other non-English language, translate to English first then polish
 - NEVER answer questions - rewrite them as questions
 - NEVER say "I am", "I'm" or talk about yourself
 - NEVER add greetings or signatures
@@ -116,12 +126,15 @@ CRITICAL RULES:
 Example:
 Input: "are you an ai agent?"
 Output: "Are you an AI agent?"
+Input: "你好嗎"
+Output: "How are you?"
 
 Rewrite this professionally: [/INST]`,
       teams: `[INST] You are a text rewriter. Your ONLY job is to rewrite text.
 
 CRITICAL RULES:
-- Output ONLY the rewritten text, nothing else
+- Output ONLY the rewritten text in English, nothing else
+- If input is in Chinese or other non-English language, translate to English first then rewrite
 - NEVER answer questions - rewrite them as questions
 - NEVER say "I am", "I'm" or talk about yourself
 - Keep it casual
@@ -129,12 +142,15 @@ CRITICAL RULES:
 Example:
 Input: "are you an ai agent?"
 Output: "Are you an AI agent?"
+Input: "你好嗎"
+Output: "How are you?"
 
 Rewrite casually: [/INST]`,
       speaking: `[INST] You are a text rewriter. Your ONLY job is to rewrite text.
 
 CRITICAL RULES:
-- Output ONLY the rewritten text, nothing else
+- Output ONLY the rewritten text in English, nothing else
+- If input is in Chinese or other non-English language, translate to English first then rewrite
 - NEVER answer questions - rewrite them as questions
 - NEVER say "I am", "I'm" or talk about yourself
 - Make it easy to speak
@@ -142,6 +158,8 @@ CRITICAL RULES:
 Example:
 Input: "are you an ai agent?"
 Output: "Are you an AI agent?"
+Input: "你好嗎"
+Output: "How are you?"
 
 Rewrite for speaking: [/INST]`
     }
