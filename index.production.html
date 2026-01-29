@@ -2,7 +2,7 @@
 <html class="dark" lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
   <title>flusynt — AI Writing Tool</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -31,6 +31,20 @@
   <style type="text/tailwindcss">
     @layer base {
       body { font-family: 'Inter', sans-serif; }
+      /* Prevent scroll jump when mobile keyboard opens */
+      html, body {
+        overflow-x: hidden;
+        overscroll-behavior: none;
+      }
+      @supports (-webkit-touch-callout: none) {
+        /* iOS specific: prevent zoom and scroll issues */
+        body {
+          -webkit-text-size-adjust: 100%;
+        }
+        textarea:focus {
+          font-size: 16px; /* Prevents iOS zoom on focus */
+        }
+      }
     }
     .glass {
       background: rgba(255, 255, 255, 0.03);
