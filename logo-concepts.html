@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flusynt Logo Concepts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f14;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 60px;
+      font-weight: 300;
+      font-size: 24px;
+      color: #888;
+    }
+    
+    .concepts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .concept {
+      background: #1a1a24;
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .concept h2 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 30px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .logo-container {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .brand-name {
+      font-size: 28px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #60A5FA, #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+    
+    .description {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* Concept A: 流動的 F */
+    .logo-a svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    /* Concept B: 括號 + 波浪 */
+    .logo-b svg {
+      width: 100px;
+      height: 80px;
+    }
+
+    /* Concept C: 重疊矩形 */
+    .logo-c svg {
+      width: 90px;
+      height: 80px;
+    }
+
+    /* Concept D: Fs 連體 */
+    .logo-d svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    /* Concept E: 圓形徽章 */
+    .logo-e svg {
+      width: 80px;
+      height: 80px;
+    }
+
+    /* Concept F: 極簡波浪 */
+    .logo-f svg {
+      width: 100px;
+      height: 60px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Flusynt Logo Concepts</h1>
+  
+  <div class="concepts">
+    
+    <!-- Concept A: 流動的 F -->
+    <div class="concept">
+      <h2>Concept A — 流動的 F</h2>
+      <div class="logo-container logo-a">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="gradA" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- F with flowing tail -->
+          <path d="M20 15 L55 15 Q60 15 60 20 Q60 25 55 25 L30 25 L30 35 L50 35 Q55 35 55 40 Q55 45 50 45 L30 45 L30 55 Q30 65 25 70 Q20 75 15 72" 
+                stroke="url(#gradA)" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <!-- Flowing wave extension -->
+          <path d="M15 72 Q25 68 35 72 Q45 76 55 70 Q62 66 68 68" 
+                stroke="url(#gradA)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">字母 F 延伸成流動曲線<br>代表語言的流暢轉化</p>
+    </div>
+
+    <!-- Concept B: 括號 + 波浪 -->
+    <div class="concept">
+      <h2>Concept B — 語法 + 流動</h2>
+      <div class="logo-container logo-b">
+        <svg viewBox="0 0 100 80" fill="none">
+          <defs>
+            <linearGradient id="gradB" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- Left bracket -->
+          <path d="M25 20 Q15 20 15 30 L15 50 Q15 60 25 60" 
+                stroke="url(#gradB)" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <!-- Right bracket -->
+          <path d="M75 20 Q85 20 85 30 L85 50 Q85 60 75 60" 
+                stroke="url(#gradB)" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <!-- Wave inside -->
+          <path d="M30 40 Q40 30 50 40 Q60 50 70 40" 
+                stroke="url(#gradB)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">抽象括號（syntax）<br>內含流動波浪（fluent）</p>
+    </div>
+
+    <!-- Concept C: 重疊矩形 -->
+    <div class="concept">
+      <h2>Concept C — 轉化重疊</h2>
+      <div class="logo-container logo-c">
+        <svg viewBox="0 0 90 80" fill="none">
+          <defs>
+            <linearGradient id="gradC1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#818CF8"/>
+            </linearGradient>
+            <linearGradient id="gradC2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#818CF8"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- Back rectangle -->
+          <rect x="10" y="15" width="45" height="50" rx="10" 
+                fill="url(#gradC1)" opacity="0.5"/>
+          <!-- Front rectangle -->
+          <rect x="35" y="15" width="45" height="50" rx="10" 
+                fill="url(#gradC2)" opacity="0.7"/>
+          <!-- Arrow or flow indicator -->
+          <path d="M30 40 L60 40 M55 35 L60 40 L55 45" 
+                stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">重疊的圓角矩形<br>代表原文到改寫的轉化</p>
+    </div>
+
+    <!-- Concept D: Fs 連體 -->
+    <div class="concept">
+      <h2>Concept D — Fs 連體</h2>
+      <div class="logo-container logo-d">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="gradD" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- Connected Fs lettermark -->
+          <path d="M15 20 L40 20 Q45 20 45 25 L45 28 Q45 32 40 32 L25 32 L25 40 L38 40 Q42 40 42 44 L42 48 Q42 52 38 52 L25 52 L25 65
+                   M45 32 Q55 32 60 40 Q65 48 60 56 Q55 64 45 64 L42 64" 
+                stroke="url(#gradD)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">F 和 S 的連體設計<br>流線型現代感</p>
+    </div>
+
+    <!-- Concept E: 圓形徽章 -->
+    <div class="concept">
+      <h2>Concept E — 圓形徽章</h2>
+      <div class="logo-container logo-e">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="gradE" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- Circle -->
+          <circle cx="40" cy="40" r="35" stroke="url(#gradE)" stroke-width="3" fill="none"/>
+          <!-- Wave inside circle -->
+          <path d="M20 40 Q28 30 40 40 Q52 50 60 40" 
+                stroke="url(#gradE)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <!-- Dots representing text -->
+          <circle cx="25" cy="52" r="2" fill="url(#gradE)" opacity="0.6"/>
+          <circle cx="33" cy="52" r="2" fill="url(#gradE)" opacity="0.6"/>
+          <circle cx="41" cy="52" r="2" fill="url(#gradE)" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">圓形徽章設計<br>內含波浪與文字符號</p>
+    </div>
+
+    <!-- Concept F: 極簡波浪 -->
+    <div class="concept">
+      <h2>Concept F — 極簡波浪</h2>
+      <div class="logo-container logo-f">
+        <svg viewBox="0 0 100 60" fill="none">
+          <defs>
+            <linearGradient id="gradF" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="50%" style="stop-color:#818CF8"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- Three flowing lines -->
+          <path d="M10 20 Q30 10 50 20 Q70 30 90 20" 
+                stroke="url(#gradF)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M10 32 Q30 22 50 32 Q70 42 90 32" 
+                stroke="url(#gradF)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M10 44 Q30 34 50 44 Q70 54 90 44" 
+                stroke="url(#gradF)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">三條流動的波浪線<br>代表三種改寫風格</p>
+    </div>
+
+  </div>
+</body>
+</html>

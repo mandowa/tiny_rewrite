@@ -843,10 +843,8 @@ class App {
     const modelSelect = document.getElementById('model-selector');
     modelSelect.innerHTML = '';
     
-    // In proxy mode, use unified model list if available
-    const models = (this.useProxy && Config.ALL_MODELS) 
-      ? Config.ALL_MODELS 
-      : Config.MODELS[this.currentProvider];
+    // Use ALL_MODELS if available, otherwise fall back to provider-specific models
+    const models = Config.ALL_MODELS || Config.MODELS[this.currentProvider];
     
     models.forEach(model => {
       const option = document.createElement('option');

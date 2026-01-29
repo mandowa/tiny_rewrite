@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flusynt Logo Concepts v2</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f14;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 300;
+      font-size: 24px;
+      color: #888;
+    }
+    .section-title {
+      text-align: center;
+      margin: 40px 0 30px;
+      font-weight: 400;
+      font-size: 16px;
+      color: #A78BFA;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+    .concepts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .concept {
+      background: #1a1a24;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+    }
+    .concept h2 {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 20px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .logo-container {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .logo-container svg { width: 100px; height: 80px; }
+    .brand-name {
+      font-size: 24px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #60A5FA, #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+    .description {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Flusynt Logo Concepts</h1>
+  
+  <div class="section-title">功能導向設計</div>
+  <div class="concepts">
+
+    <!-- Concept G: 1→3 分支 -->
+    <div class="concept">
+      <h2>1→3 分支</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 80" fill="none">
+          <defs>
+            <linearGradient id="gradG" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 40 L35 40" stroke="url(#gradG)" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="40" cy="40" r="6" fill="url(#gradG)"/>
+          <path d="M46 40 Q55 20 90 15" stroke="#60A5FA" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M46 40 L90 40" stroke="#818CF8" stroke-width="3" stroke-linecap="round"/>
+          <path d="M46 40 Q55 60 90 65" stroke="#A78BFA" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="90" cy="15" r="4" fill="#60A5FA"/>
+          <circle cx="90" cy="40" r="4" fill="#818CF8"/>
+          <circle cx="90" cy="65" r="4" fill="#A78BFA"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">一個輸入 → 三種輸出<br>Email / Teams / Speaking</p>
+    </div>
+
+    <!-- Concept I: 三種對話泡泡 -->
+    <div class="concept">
+      <h2>三種風格</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 80" fill="none">
+          <rect x="8" y="15" width="28" height="20" rx="4" stroke="#60A5FA" stroke-width="2" fill="none"/>
+          <path d="M12 20 L22 27 L32 20" stroke="#60A5FA" stroke-width="1.5" fill="none"/>
+          <rect x="38" y="25" width="26" height="18" rx="9" stroke="#818CF8" stroke-width="2" fill="none"/>
+          <circle cx="46" cy="34" r="2" fill="#818CF8"/>
+          <circle cx="51" cy="34" r="2" fill="#818CF8"/>
+          <circle cx="56" cy="34" r="2" fill="#818CF8"/>
+          <ellipse cx="78" cy="40" rx="14" ry="12" stroke="#A78BFA" stroke-width="2" fill="none"/>
+          <path d="M72 40 Q78 36 84 40" stroke="#A78BFA" stroke-width="1.5" fill="none"/>
+          <path d="M88 35 Q92 40 88 45" stroke="#A78BFA" stroke-width="1.5" fill="none" opacity="0.6"/>
+          <path d="M91 32 Q96 40 91 48" stroke="#A78BFA" stroke-width="1.5" fill="none" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">三種對話形式<br>正式 / 輕鬆 / 口語</p>
+    </div>
+
+    <!-- Concept L: 輸入框 + 三輸出 -->
+    <div class="concept">
+      <h2>介面抽象</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 90 80" fill="none">
+          <defs>
+            <linearGradient id="gradL" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <rect x="10" y="30" width="30" height="20" rx="5" stroke="url(#gradL)" stroke-width="2" fill="none"/>
+          <line x1="18" y1="36" x2="18" y2="44" stroke="#60A5FA" stroke-width="2" opacity="0.6"/>
+          <path d="M42 40 L50 40" stroke="url(#gradL)" stroke-width="2" stroke-linecap="round"/>
+          <rect x="55" y="20" width="25" height="8" rx="2" fill="#60A5FA" opacity="0.8"/>
+          <rect x="55" y="36" width="25" height="8" rx="2" fill="#818CF8" opacity="0.8"/>
+          <rect x="55" y="52" width="25" height="8" rx="2" fill="#A78BFA" opacity="0.8"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">輸入框 → 三個輸出<br>直接呈現應用功能</p>
+    </div>
+
+    <!-- Concept H: 文字轉化 -->
+    <div class="concept">
+      <h2>文字轉化</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 80" fill="none">
+          <defs>
+            <linearGradient id="gradH" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <text x="10" y="48" font-family="Arial" font-size="28" fill="#60A5FA" opacity="0.4">Aa</text>
+          <path d="M45 40 L55 40 M52 36 L56 40 L52 44" stroke="url(#gradH)" stroke-width="2" stroke-linecap="round"/>
+          <text x="62" y="48" font-family="Arial" font-size="28" font-weight="500" fill="#A78BFA">Aa</text>
+          <path d="M88 25 L88 20 M85 22.5 L91 22.5" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">模糊 → 清晰<br>代表改寫精煉過程</p>
+    </div>
+
+  </div>
+
+  <div class="section-title">抽象視覺設計</div>
+  <div class="concepts">
+
+    <!-- Concept K: 轉化符號 -->
+    <div class="concept">
+      <h2>轉化符號</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="gradK" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <text x="22" y="55" font-family="Georgia, serif" font-size="40" font-weight="400" fill="url(#gradK)">A</text>
+          <path d="M25 18 Q40 8 55 18" stroke="url(#gradK)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M52 14 L55 18 L51 21" stroke="url(#gradK)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <circle cx="60" cy="25" r="2" fill="#A78BFA" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">字母 + 轉化弧線<br>代表文字的提升</p>
+    </div>
+
+    <!-- Concept J: 筆 + 流動 -->
+    <div class="concept">
+      <h2>筆尖流動</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="gradJ" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 60 L30 50 L55 25 L60 30 L35 55 L25 65 Z" stroke="url(#gradJ)" stroke-width="2" fill="none"/>
+          <path d="M55 25 L60 20 L65 25 L60 30" stroke="url(#gradJ)" stroke-width="2" fill="none"/>
+          <path d="M20 60 Q10 55 15 45 Q20 35 30 38 Q40 41 38 30" stroke="url(#gradJ)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <circle cx="38" cy="28" r="3" fill="#A78BFA" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">筆尖流出漸層墨水<br>代表創作與流暢</p>
+    </div>
+
+    <!-- Concept B: 括號 + 波浪 -->
+    <div class="concept">
+      <h2>語法 + 流動</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 80" fill="none">
+          <defs>
+            <linearGradient id="gradB" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <path d="M25 20 Q15 20 15 30 L15 50 Q15 60 25 60" stroke="url(#gradB)" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M75 20 Q85 20 85 30 L85 50 Q85 60 75 60" stroke="url(#gradB)" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M30 40 Q40 30 50 40 Q60 50 70 40" stroke="url(#gradB)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">抽象括號（syntax）<br>內含流動波浪（fluent）</p>
+    </div>
+
+    <!-- Concept F: 極簡波浪 -->
+    <div class="concept">
+      <h2>極簡波浪</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 60" fill="none">
+          <defs>
+            <linearGradient id="gradF" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="50%" style="stop-color:#818CF8"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 15 Q30 5 50 15 Q70 25 90 15" stroke="url(#gradF)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M10 30 Q30 20 50 30 Q70 40 90 30" stroke="url(#gradF)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M10 45 Q30 35 50 45 Q70 55 90 45" stroke="url(#gradF)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">三條流動的波浪線<br>代表三種改寫風格</p>
+    </div>
+
+  </div>
+</body>
+</html>

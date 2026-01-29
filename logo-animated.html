@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flusynt — 動畫 Logo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f14;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    
+    h1 {
+      font-weight: 300;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 60px;
+    }
+    
+    .logo-container {
+      position: relative;
+      width: 400px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* 左邊：散落的錯誤字母 */
+    .scattered {
+      position: absolute;
+      left: 0;
+      width: 150px;
+      height: 150px;
+    }
+    
+    .letter {
+      position: absolute;
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 20px;
+      color: #60A5FA;
+      opacity: 0;
+      animation: scatter 4s ease-in-out infinite;
+    }
+    
+    .letter:nth-child(1) { left: 20px; top: 20px; animation-delay: 0s; }
+    .letter:nth-child(2) { left: 80px; top: 35px; animation-delay: 0.15s; }
+    .letter:nth-child(3) { left: 45px; top: 60px; animation-delay: 0.3s; }
+    .letter:nth-child(4) { left: 100px; top: 70px; animation-delay: 0.45s; }
+    .letter:nth-child(5) { left: 25px; top: 95px; animation-delay: 0.6s; }
+    .letter:nth-child(6) { left: 70px; top: 110px; animation-delay: 0.75s; }
+    .letter:nth-child(7) { left: 110px; top: 100px; animation-delay: 0.9s; }
+    
+    @keyframes scatter {
+      0%, 100% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+      10% { opacity: 0.6; transform: translate(0, 0) rotate(var(--rotate, 5deg)); }
+      40% { opacity: 0.6; transform: translate(0, 0) rotate(var(--rotate, 5deg)); }
+      60% { opacity: 0; transform: translate(var(--tx, 50px), var(--ty, 0)) rotate(0deg); }
+    }
+    
+    .letter:nth-child(1) { --rotate: -8deg; --tx: 120px; --ty: 30px; }
+    .letter:nth-child(2) { --rotate: 12deg; --tx: 80px; --ty: 15px; }
+    .letter:nth-child(3) { --rotate: -5deg; --tx: 100px; --ty: 5px; }
+    .letter:nth-child(4) { --rotate: 15deg; --tx: 60px; --ty: -10px; }
+    .letter:nth-child(5) { --rotate: -10deg; --tx: 110px; --ty: -20px; }
+    .letter:nth-child(6) { --rotate: 8deg; --tx: 90px; --ty: -30px; }
+    .letter:nth-child(7) { --rotate: -12deg; --tx: 70px; --ty: -25px; }
+    
+    /* 中間：箭頭 */
+    .arrow {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: arrowPulse 4s ease-in-out infinite;
+    }
+    
+    .arrow svg {
+      width: 40px;
+      height: 40px;
+    }
+    
+    @keyframes arrowPulse {
+      0%, 30%, 100% { opacity: 0; }
+      45%, 70% { opacity: 1; }
+    }
+    
+    /* 右邊：正確的文字 */
+    .correct {
+      position: absolute;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .correct-word {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #818CF8, #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: appear 4s ease-in-out infinite;
+    }
+    
+    @keyframes appear {
+      0%, 50% { opacity: 0; transform: scale(0.8); }
+      65%, 90% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.8); }
+    }
+    
+    /* 品牌名 */
+    .brand {
+      margin-top: 60px;
+      text-align: center;
+    }
+    
+    .brand-name {
+      font-size: 36px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #60A5FA, #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 4px;
+    }
+    
+    .brand-tagline {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #555;
+      letter-spacing: 2px;
+    }
+    
+    /* 多組動畫切換 */
+    .word-set {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .word-set:nth-child(1) { animation: showSet 12s ease-in-out infinite; animation-delay: 0s; }
+    .word-set:nth-child(2) { animation: showSet 12s ease-in-out infinite; animation-delay: 4s; }
+    .word-set:nth-child(3) { animation: showSet 12s ease-in-out infinite; animation-delay: 8s; }
+    
+    .word-set:nth-child(1) .letter,
+    .word-set:nth-child(1) .arrow,
+    .word-set:nth-child(1) .correct-word { animation-duration: 4s; }
+    
+    .word-set:nth-child(2) .letter,
+    .word-set:nth-child(2) .arrow,
+    .word-set:nth-child(2) .correct-word { animation-duration: 4s; animation-delay: inherit; }
+    
+    .word-set:nth-child(3) .letter,
+    .word-set:nth-child(3) .arrow,
+    .word-set:nth-child(3) .correct-word { animation-duration: 4s; animation-delay: inherit; }
+    
+    @keyframes showSet {
+      0%, 28% { visibility: visible; }
+      33%, 100% { visibility: hidden; }
+    }
+    
+    /* 簡化版：單一動畫 */
+    .simple-version {
+      margin-top: 80px;
+      padding-top: 60px;
+      border-top: 1px solid #222;
+      width: 100%;
+      max-width: 600px;
+    }
+    
+    .simple-version h2 {
+      text-align: center;
+      font-weight: 300;
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 40px;
+    }
+    
+    .simple-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .simple-left {
+      display: flex;
+      flex-wrap: wrap;
+      width: 80px;
+      gap: 4px;
+    }
+    
+    .simple-block {
+      width: 16px;
+      height: 16px;
+      background: #60A5FA;
+      border-radius: 3px;
+      opacity: 0.3;
+      animation: blockFloat 3s ease-in-out infinite;
+    }
+    
+    .simple-block:nth-child(1) { animation-delay: 0s; transform: rotate(5deg); }
+    .simple-block:nth-child(2) { animation-delay: 0.1s; transform: rotate(-8deg); }
+    .simple-block:nth-child(3) { animation-delay: 0.2s; transform: rotate(12deg); }
+    .simple-block:nth-child(4) { animation-delay: 0.3s; transform: rotate(-5deg); }
+    .simple-block:nth-child(5) { animation-delay: 0.4s; transform: rotate(8deg); }
+    .simple-block:nth-child(6) { animation-delay: 0.5s; transform: rotate(-10deg); }
+    
+    @keyframes blockFloat {
+      0%, 100% { opacity: 0.3; transform: translateY(0) rotate(var(--r, 5deg)); }
+      50% { opacity: 0.5; transform: translateY(-3px) rotate(var(--r, 5deg)); }
+    }
+    
+    .simple-arrow {
+      color: #818CF8;
+      font-size: 24px;
+      animation: arrowGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes arrowGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    .simple-right {
+      width: 80px;
+      height: 60px;
+      background: linear-gradient(135deg, #818CF8, #A78BFA);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px;
+      gap: 6px;
+    }
+    
+    .simple-line {
+      height: 4px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 2px;
+    }
+    
+    .simple-line:nth-child(1) { width: 90%; }
+    .simple-line:nth-child(2) { width: 70%; }
+    .simple-line:nth-child(3) { width: 50%; }
+  </style>
+</head>
+<body>
+  <h1>動畫 Logo — 錯字 → 正確</h1>
+  
+  <div class="logo-container">
+    <!-- 第一組：recieve → receive -->
+    <div class="word-set">
+      <div class="scattered">
+        <span class="letter">r</span>
+        <span class="letter">e</span>
+        <span class="letter">c</span>
+        <span class="letter">i</span>
+        <span class="letter">e</span>
+        <span class="letter">v</span>
+        <span class="letter">e</span>
+      </div>
+      <div class="arrow">
+        <svg viewBox="0 0 40 40" fill="none">
+          <defs>
+            <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <path d="M8 20 L28 20" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 14 L30 20 L24 26" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="correct">
+        <span class="correct-word">receive</span>
+      </div>
+    </div>
+    
+    <!-- 第二組：definately → definitely -->
+    <div class="word-set" style="animation-delay: 4s;">
+      <div class="scattered">
+        <span class="letter" style="animation-delay: 4s;">d</span>
+        <span class="letter" style="animation-delay: 4.1s;">e</span>
+        <span class="letter" style="animation-delay: 4.2s;">f</span>
+        <span class="letter" style="animation-delay: 4.3s;">i</span>
+        <span class="letter" style="animation-delay: 4.4s;">n</span>
+        <span class="letter" style="animation-delay: 4.5s;">a</span>
+        <span class="letter" style="animation-delay: 4.6s;">t</span>
+      </div>
+      <div class="arrow" style="animation-delay: 4s;">
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M8 20 L28 20" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 14 L30 20 L24 26" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="correct">
+        <span class="correct-word" style="animation-delay: 4s;">definitely</span>
+      </div>
+    </div>
+    
+    <!-- 第三組：occured → occurred -->
+    <div class="word-set" style="animation-delay: 8s;">
+      <div class="scattered">
+        <span class="letter" style="animation-delay: 8s;">o</span>
+        <span class="letter" style="animation-delay: 8.1s;">c</span>
+        <span class="letter" style="animation-delay: 8.2s;">c</span>
+        <span class="letter" style="animation-delay: 8.3s;">u</span>
+        <span class="letter" style="animation-delay: 8.4s;">r</span>
+        <span class="letter" style="animation-delay: 8.5s;">e</span>
+        <span class="letter" style="animation-delay: 8.6s;">d</span>
+      </div>
+      <div class="arrow" style="animation-delay: 8s;">
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M8 20 L28 20" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M24 14 L30 20 L24 26" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="correct">
+        <span class="correct-word" style="animation-delay: 8s;">occurred</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="brand">
+    <div class="brand-name">flusynt</div>
+    <div class="brand-tagline">Fluent + Syntax</div>
+  </div>
+  
+  <!-- 簡化靜態版本 -->
+  <div class="simple-version">
+    <h2>靜態 Logo 版本（適合小尺寸）</h2>
+    <div class="simple-logo">
+      <div class="simple-left">
+        <div class="simple-block"></div>
+        <div class="simple-block"></div>
+        <div class="simple-block"></div>
+        <div class="simple-block"></div>
+        <div class="simple-block"></div>
+        <div class="simple-block"></div>
+      </div>
+      <div class="simple-arrow">→</div>
+      <div class="simple-right">
+        <div class="simple-line"></div>
+        <div class="simple-line"></div>
+        <div class="simple-line"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

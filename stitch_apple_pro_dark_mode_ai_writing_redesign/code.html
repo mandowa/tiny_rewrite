@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>flusynt — AI Writing Tool</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3b82f6",
+                        "background-light": "#ffffff",
+                        "background-dark": "#0a0c10",
+                        "card-dark": "#1a1c23",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "system-ui", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Inter', sans-serif;
+            }
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .dark .result-card {
+            background: rgba(45, 48, 58, 0.5);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .glow-logo {
+            filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));
+        }
+        .input-glow:focus-within {
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.15);
+        }
+        .rewrite-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .rewrite-btn:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
+        }
+        @keyframes spell-check-cycle {0%, 4% { content: ""; }
+            5% { content: "r"; }
+            6% { content: "re"; }
+            7% { content: "rec"; }
+            8% { content: "reci"; }
+            9% { content: "recie"; }
+            10% { content: "reciev"; }
+            11% { content: "recieve"; }
+            15% { content: "recieve"; }
+            16% { content: "receive"; }
+            24% { content: "receive"; }
+            25% { content: "receiv"; }
+            26% { content: "recei"; }
+            27% { content: "rece"; }
+            28% { content: "rec"; }
+            29% { content: "re"; }
+            30% { content: "r"; }
+            31% { content: ""; }32% { content: "d"; }
+            33% { content: "de"; }
+            34% { content: "def"; }
+            35% { content: "defi"; }
+            36% { content: "defin"; }
+            37% { content: "defini"; }
+            38% { content: "definit"; }
+            39% { content: "definitl"; }
+            40% { content: "definitly"; }
+            44% { content: "definitly"; }
+            45% { content: "definitely"; }
+            53% { content: "definitely"; }
+            54% { content: "definitel"; }
+            55% { content: "definite"; }
+            56% { content: "definit"; }
+            57% { content: "defini"; }
+            58% { content: "defin"; }
+            59% { content: "defi"; }
+            60% { content: "def"; }
+            61% { content: "de"; }
+            62% { content: "d"; }
+            63% { content: ""; }64% { content: "o"; }
+            65% { content: "oc"; }
+            66% { content: "occ"; }
+            67% { content: "occu"; }
+            68% { content: "occur"; }
+            69% { content: "occure"; }
+            70% { content: "occured"; }
+            74% { content: "occured"; }
+            75% { content: "occurred"; }
+            83% { content: "occurred"; }
+            84% { content: "occurre"; }
+            85% { content: "occurr"; }
+            86% { content: "occur"; }
+            87% { content: "occu"; }
+            88% { content: "occ"; }
+            89% { content: "oc"; }
+            90% { content: "o"; }
+            91%, 100% { content: ""; }
+        }
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .spell-animation::after {
+            content: "";
+            animation: spell-check-cycle 15s infinite;
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #3b82f6;
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: cursor-blink 1s infinite;
+        }
+        .text-gradient-brand {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<div class="max-w-6xl mx-auto px-6 py-12">
+<header class="flex items-center justify-between mb-16">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="relative w-12 h-12 flex items-center justify-center glow-logo transition-transform duration-500 group-hover:scale-110">
+<div class="absolute inset-0 bg-blue-500/20 blur-xl rounded-full"></div>
+<svg fill="none" height="48" viewBox="0 0 32 32" width="48" xmlns="http://www.w3.org/2000/svg">
+<rect fill="url(#grad1)" fill-opacity="0.9" height="18" rx="4" width="14" x="14" y="4"></rect>
+<rect fill="#3b82f6" height="10" rx="2" transform="rotate(-15 4 10)" width="10" x="4" y="10"></rect>
+<rect fill="#3b82f6" height="8" rx="2" transform="rotate(10 6 18)" width="8" x="6" y="18"></rect>
+<defs>
+<linearGradient gradientUnits="userSpaceOnUse" id="grad1" x1="14" x2="28" y1="4" y2="22">
+<stop stop-color="#E9D5FF"></stop>
+<stop offset="1" stop-color="#93C5FD"></stop>
+</linearGradient>
+</defs>
+</svg>
+</div>
+<h1 class="text-4xl font-black tracking-tighter text-slate-900 dark:text-white glow-logo">flusynt</h1>
+</div>
+<div class="hidden lg:flex items-center border-l border-white/10 pl-10 h-10">
+<div class="text-lg font-medium text-slate-400 flex items-center min-w-[200px]">
+<span class="spell-animation text-gradient-brand font-bold tracking-tight"></span><span class="cursor"></span>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm">Beta</span>
+</div>
+<div class="glass px-6 py-3 rounded-2xl flex items-center gap-4 cursor-pointer hover:bg-white/10 transition-all border border-white/10 group">
+<div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Model — <span class="text-slate-900 dark:text-white font-semibold">GPT-4.1 Turbo</span></span>
+<span class="material-symbols-outlined text-lg text-slate-400 group-hover:text-white transition-colors">expand_more</span>
+</div>
+</header>
+<main class="relative mb-16">
+<div class="input-glow glass rounded-[2.5rem] p-2 transition-all duration-700">
+<textarea class="w-full h-80 bg-transparent border-none focus:ring-0 text-2xl placeholder-slate-500 dark:placeholder-slate-600 p-10 resize-none text-slate-800 dark:text-slate-200 leading-relaxed font-light" placeholder="Type or paste your text here..."></textarea>
+<div class="flex items-center justify-between p-6 pt-0">
+<div class="flex bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl gap-1 border border-white/5">
+<button class="px-6 py-3 rounded-xl bg-blue-500 text-white shadow-lg shadow-blue-500/25 text-sm font-semibold flex items-center gap-2">
+                    Email
+                </button>
+<button class="px-6 py-3 rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-white text-sm font-medium flex items-center gap-2 transition-colors">
+                    Teams <span class="flex gap-0.5"><span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span><span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span></span>
+</button>
+<button class="px-6 py-3 rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-white text-sm font-medium flex items-center gap-2 transition-colors">
+                    Speaking
+                </button>
+</div>
+<button class="rewrite-btn px-10 py-4 rounded-[1.5rem] text-white font-bold flex items-center gap-3 shadow-xl text-lg">
+<span class="material-symbols-outlined text-2xl">auto_fix_high</span>
+                Rewrite
+            </button>
+</div>
+</div>
+</main>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="result-card p-8 rounded-[2.5rem] flex flex-col gap-6 group hover:border-blue-500/40 transition-all duration-500">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3.5 text-blue-400">
+<div class="p-2.5 bg-blue-500/10 rounded-xl">
+<span class="material-symbols-outlined text-2xl">mail</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Email</span>
+</div>
+<button class="p-2.5 rounded-xl hover:bg-white/10 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-xl">edit_note</span>
+</button>
+</div>
+<p class="text-lg md:text-[1.125rem] leading-[1.85] font-normal text-slate-100 dark:text-white/95">
+            Hi team, hope everyone is having a great week. I've been reviewing our latest progress on the <span class="text-blue-400 font-medium">flusynt</span> project and wanted to touch base on the next steps for the deployment phase. Looking forward to your thoughts.
+        </p>
+<div class="mt-auto pt-4 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">34 words</span>
+<button class="text-xs font-bold text-blue-400 flex items-center gap-1.5 hover:text-blue-300 transition-colors">
+                Copy <span class="material-symbols-outlined text-base">content_copy</span>
+</button>
+</div>
+</div>
+<div class="result-card p-8 rounded-[2.5rem] flex flex-col gap-6 group hover:border-purple-500/40 transition-all duration-500">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3.5 text-purple-400">
+<div class="p-2.5 bg-purple-500/10 rounded-xl">
+<span class="material-symbols-outlined text-2xl">groups</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Teams</span>
+</div>
+<div class="flex gap-1.5">
+<button class="p-2.5 rounded-xl hover:bg-white/10 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-xl">description</span>
+</button>
+<button class="p-2.5 rounded-xl hover:bg-white/10 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-xl">more_horiz</span>
+</button>
+</div>
+</div>
+<p class="text-lg md:text-[1.125rem] leading-[1.85] font-normal text-slate-100 dark:text-white/95">
+            Quick update @everyone! 🚀 Reviewed the <span class="text-purple-400 font-medium">flusynt</span> roadmap. We're moving into the deployment phase. Let's sync up later today to iron out the details.
+        </p>
+<div class="mt-auto pt-4 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">28 words</span>
+<button class="text-xs font-bold text-purple-400 flex items-center gap-1.5 hover:text-purple-300 transition-colors">
+                Copy <span class="material-symbols-outlined text-base">content_copy</span>
+</button>
+</div>
+</div>
+<div class="result-card p-8 rounded-[2.5rem] flex flex-col gap-6 group hover:border-sky-400/40 transition-all duration-500">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3.5 text-sky-400">
+<div class="p-2.5 bg-sky-500/10 rounded-xl">
+<span class="material-symbols-outlined text-2xl">mic</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Speaking</span>
+</div>
+<div class="flex gap-1.5">
+<button class="p-2.5 rounded-xl hover:bg-white/10 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-xl">volume_up</span>
+</button>
+<button class="p-2.5 rounded-xl hover:bg-white/10 text-slate-400 transition-colors">
+<span class="material-symbols-outlined text-xl">more_horiz</span>
+</button>
+</div>
+</div>
+<p class="text-lg md:text-[1.125rem] leading-[1.85] font-normal text-slate-100 dark:text-white/95">
+            So, looking at where we are with <span class="text-sky-400 font-medium">flusynt</span>... I think the main takeaway is that we're officially ready to start deploying. I'd love to hear what you guys think about how we should approach this.
+        </p>
+<div class="mt-auto pt-4 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">42 words</span>
+<button class="text-xs font-bold text-sky-400 flex items-center gap-1.5 hover:text-sky-300 transition-colors">
+                Copy <span class="material-symbols-outlined text-base">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-0 left-0 w-full h-[60vh] pointer-events-none overflow-hidden -z-10 opacity-40 dark:opacity-30">
+<div class="absolute -bottom-48 left-1/4 w-[1000px] h-[1000px] bg-blue-600/30 rounded-full blur-[160px]"></div>
+<div class="absolute -bottom-48 right-1/4 w-[1000px] h-[1000px] bg-purple-700/30 rounded-full blur-[160px]"></div>
+</div>
+
+</body></html>

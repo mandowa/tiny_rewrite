@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flusynt — 文字轉化概念</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f14;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 50px;
+      font-weight: 300;
+      font-size: 20px;
+      color: #666;
+    }
+    .concepts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .concept {
+      background: #1a1a24;
+      border-radius: 20px;
+      padding: 35px;
+      text-align: center;
+    }
+    .concept h2 {
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 25px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .logo-container {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    .brand-name {
+      font-size: 22px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #60A5FA, #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+    .description {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.7;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>文字轉化概念變體 — Text Transformation</h1>
+  
+  <div class="concepts">
+
+    <!-- V1: 基本 Aa → Aa -->
+    <div class="concept">
+      <h2>V1 — 基本轉化</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 120 80" fill="none">
+          <defs>
+            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <text x="5" y="52" font-family="Arial" font-size="32" fill="#60A5FA" opacity="0.35">Aa</text>
+          <path d="M50 40 L70 40" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M65 36 L70 40 L65 44" stroke="url(#g1)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <text x="78" y="52" font-family="Arial" font-size="32" font-weight="600" fill="#A78BFA">Aa</text>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">模糊文字 → 清晰文字<br>最直接的轉化表達</p>
+    </div>
+
+    <!-- V2: 單字母 F 轉化 -->
+    <div class="concept">
+      <h2>V2 — 字母 F 轉化</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 80" fill="none">
+          <defs>
+            <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <text x="10" y="55" font-family="Georgia, serif" font-size="42" fill="#60A5FA" opacity="0.3">F</text>
+          <path d="M38 40 L52 40" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M48 36 L52 40 L48 44" stroke="url(#g2)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <text x="58" y="55" font-family="Georgia, serif" font-size="42" font-weight="500" fill="url(#g2)">F</text>
+          <circle cx="85" cy="22" r="3" fill="#A78BFA" opacity="0.5"/>
+          <circle cx="92" cy="28" r="2" fill="#A78BFA" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">品牌首字母 F 的轉化<br>簡潔有力</p>
+    </div>
+
+    <!-- V3: 波浪線文字 -->
+    <div class="concept">
+      <h2>V3 — 波浪到直線</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 120 80" fill="none">
+          <defs>
+            <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- 左邊：波浪線（代表混亂） -->
+          <path d="M10 30 Q15 25 20 30 Q25 35 30 30 Q35 25 40 30" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+          <path d="M10 42 Q15 37 20 42 Q25 47 30 42 Q35 37 40 42" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.4"/>
+          <path d="M10 54 Q15 49 20 54 Q25 59 30 54 Q35 49 40 54" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.3"/>
+          <!-- 箭頭 -->
+          <path d="M48 40 L62 40" stroke="url(#g3)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M58 36 L62 40 L58 44" stroke="url(#g3)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <!-- 右邊：直線（代表清晰） -->
+          <line x1="72" y1="30" x2="110" y2="30" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="72" y1="42" x2="100" y2="42" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+          <line x1="72" y1="54" x2="90" y2="54" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">混亂波浪 → 整齊直線<br>代表文字的梳理</p>
+    </div>
+
+    <!-- V4: 漸變字母 -->
+    <div class="concept">
+      <h2>V4 — 漸變過程</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 120 80" fill="none">
+          <text x="5" y="52" font-family="Arial" font-size="28" fill="#60A5FA" opacity="0.2">A</text>
+          <text x="28" y="52" font-family="Arial" font-size="28" fill="#818CF8" opacity="0.4">A</text>
+          <text x="51" y="52" font-family="Arial" font-size="28" fill="#818CF8" opacity="0.6">A</text>
+          <text x="74" y="52" font-family="Arial" font-size="28" fill="#A78BFA" opacity="0.8">A</text>
+          <text x="97" y="52" font-family="Arial" font-size="28" font-weight="600" fill="#A78BFA">A</text>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">漸進式轉化過程<br>從模糊到清晰的旅程</p>
+    </div>
+
+    <!-- V5: 重疊字母 -->
+    <div class="concept">
+      <h2>V5 — 重疊蛻變</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- 背景模糊字母 -->
+          <text x="15" y="58" font-family="Georgia, serif" font-size="50" fill="#60A5FA" opacity="0.15">F</text>
+          <!-- 中間過渡 -->
+          <text x="20" y="55" font-family="Georgia, serif" font-size="50" fill="#818CF8" opacity="0.3">F</text>
+          <!-- 前景清晰字母 -->
+          <text x="25" y="52" font-family="Georgia, serif" font-size="50" font-weight="500" fill="url(#g5)">F</text>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">重疊的字母層次<br>代表迭代精煉</p>
+    </div>
+
+    <!-- V6: 破碎到完整 -->
+    <div class="concept">
+      <h2>V6 — 破碎到完整</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 120 80" fill="none">
+          <defs>
+            <linearGradient id="g6" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- 左邊：破碎的方塊 -->
+          <rect x="8" y="25" width="8" height="8" fill="#60A5FA" opacity="0.3" transform="rotate(5 12 29)"/>
+          <rect x="20" y="30" width="6" height="6" fill="#60A5FA" opacity="0.4" transform="rotate(-8 23 33)"/>
+          <rect x="12" y="40" width="10" height="10" fill="#60A5FA" opacity="0.25" transform="rotate(12 17 45)"/>
+          <rect x="28" y="42" width="7" height="7" fill="#60A5FA" opacity="0.35" transform="rotate(-3 31 45)"/>
+          <rect x="18" y="55" width="8" height="8" fill="#60A5FA" opacity="0.2" transform="rotate(8 22 59)"/>
+          <!-- 箭頭 -->
+          <path d="M48 40 L62 40" stroke="url(#g6)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M58 36 L62 40 L58 44" stroke="url(#g6)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <!-- 右邊：完整的圓角矩形 -->
+          <rect x="72" y="22" width="38" height="36" rx="8" fill="url(#g6)" opacity="0.9"/>
+          <!-- 內部文字線條 -->
+          <line x1="80" y1="32" x2="102" y2="32" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          <line x1="80" y1="40" x2="98" y2="40" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="80" y1="48" x2="94" y2="48" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">散落碎片 → 完整文件<br>代表組織與結構化</p>
+    </div>
+
+    <!-- V7: 圓形內轉化 -->
+    <div class="concept">
+      <h2>V7 — 圓形徽章</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 80 80" fill="none">
+          <defs>
+            <linearGradient id="g7" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- 外圈 -->
+          <circle cx="40" cy="40" r="32" stroke="url(#g7)" stroke-width="2.5" fill="none"/>
+          <!-- 左半：模糊 a -->
+          <text x="18" y="48" font-family="Arial" font-size="24" fill="#60A5FA" opacity="0.4">a</text>
+          <!-- 中間箭頭 -->
+          <path d="M36 40 L44 40" stroke="url(#g7)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M42 38 L44 40 L42 42" stroke="url(#g7)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <!-- 右半：清晰 a -->
+          <text x="46" y="48" font-family="Arial" font-size="24" font-weight="600" fill="#A78BFA">a</text>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">圓形內的轉化<br>適合作為 App 圖標</p>
+    </div>
+
+    <!-- V8: 極簡箭頭 -->
+    <div class="concept">
+      <h2>V8 — 極簡符號</h2>
+      <div class="logo-container">
+        <svg viewBox="0 0 100 80" fill="none">
+          <defs>
+            <linearGradient id="g8" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#60A5FA"/>
+              <stop offset="100%" style="stop-color:#A78BFA"/>
+            </linearGradient>
+          </defs>
+          <!-- 左邊圓角矩形（虛線/不完整） -->
+          <rect x="15" y="25" width="25" height="30" rx="5" stroke="#60A5FA" stroke-width="2" stroke-dasharray="4 3" fill="none" opacity="0.5"/>
+          <!-- 轉化箭頭 -->
+          <path d="M48 40 L52 40" stroke="url(#g8)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M52 40 L62 40" stroke="url(#g8)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M58 35 L63 40 L58 45" stroke="url(#g8)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- 右邊圓角矩形（實線/完整） -->
+          <rect x="70" y="25" width="25" height="30" rx="5" stroke="#A78BFA" stroke-width="2.5" fill="none"/>
+          <rect x="70" y="25" width="25" height="30" rx="5" fill="#A78BFA" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="brand-name">flusynt</div>
+      <p class="description">虛線框 → 實線框<br>最簡化的轉化符號</p>
+    </div>
+
+  </div>
+</body>
+</html>
