@@ -409,12 +409,9 @@
     const textarea = document.getElementById('input-text');
     if (textarea) {
       textarea.addEventListener('focus', (e) => {
-        // Store current scroll position
-        const scrollY = window.scrollY;
-        // After a short delay, restore scroll position
-        setTimeout(() => {
-          window.scrollTo(0, scrollY);
-        }, 100);
+        // iOS Safari doesn't scroll when element has opacity 0
+        textarea.style.opacity = 0;
+        setTimeout(() => textarea.style.opacity = 1);
       });
     }
   </script>
