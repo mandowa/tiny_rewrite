@@ -114,9 +114,9 @@
     
     /* Active state enhancements */
     .style-chip-email.active {
-      background: rgba(59, 130, 246, 0.3);
-      border-color: rgba(59, 130, 246, 0.6);
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+      background: rgba(16, 185, 129, 0.3);
+      border-color: rgba(16, 185, 129, 0.6);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
     }
     .style-chip-teams.active {
       background: rgba(168, 85, 247, 0.3);
@@ -124,9 +124,9 @@
       box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
     }
     .style-chip-speaking.active {
-      background: rgba(14, 165, 233, 0.3);
-      border-color: rgba(14, 165, 233, 0.6);
-      box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
+      background: rgba(245, 158, 11, 0.3);
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
     }
     /* Loading spinner */
     .spinner {
@@ -228,7 +228,7 @@
         <div class="flex items-center justify-between p-4 lg:p-6 pt-0 gap-2 sm:gap-4">
           <!-- Style Chips (left) - color coded to match cards -->
           <div class="flex gap-1.5 sm:gap-2 lg:gap-2">
-            <button id="style-email-btn" data-chip="email" class="style-chip style-chip-email bg-blue-500/10 border border-blue-500/30 text-blue-400 px-3 sm:px-3 lg:px-6 py-2.5 sm:py-2 lg:py-3 rounded-xl sm:rounded-lg lg:rounded-xl text-[10px] sm:text-[10px] lg:text-sm font-semibold flex items-center justify-center gap-1.5 lg:gap-2">
+            <button id="style-email-btn" data-chip="email" class="style-chip style-chip-email bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 sm:px-3 lg:px-6 py-2.5 sm:py-2 lg:py-3 rounded-xl sm:rounded-lg lg:rounded-xl text-[10px] sm:text-[10px] lg:text-sm font-semibold flex items-center justify-center gap-1.5 lg:gap-2">
               <span class="material-symbols-outlined text-base sm:text-sm lg:text-lg">mail</span>
               <span class="hidden lg:inline">Email</span>
             </button>
@@ -236,7 +236,7 @@
               <span class="material-symbols-outlined text-base sm:text-sm lg:text-lg">groups</span>
               <span class="hidden lg:inline">Teams</span>
             </button>
-            <button id="style-speaking-btn" data-chip="speaking" class="style-chip style-chip-speaking bg-sky-500/10 border border-sky-500/30 text-sky-400 px-3 sm:px-3 lg:px-6 py-2.5 sm:py-2 lg:py-3 rounded-xl sm:rounded-lg lg:rounded-xl text-[10px] sm:text-[10px] lg:text-sm font-semibold flex items-center justify-center gap-1.5 lg:gap-2">
+            <button id="style-speaking-btn" data-chip="speaking" class="style-chip style-chip-speaking bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 sm:px-3 lg:px-6 py-2.5 sm:py-2 lg:py-3 rounded-xl sm:rounded-lg lg:rounded-xl text-[10px] sm:text-[10px] lg:text-sm font-semibold flex items-center justify-center gap-1.5 lg:gap-2">
               <span class="material-symbols-outlined text-base sm:text-sm lg:text-lg">mic</span>
               <span class="hidden lg:inline">Speaking</span>
             </button>
@@ -258,10 +258,10 @@
     <!-- Results Section -->
     <section id="results-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
       <!-- Email Card -->
-      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-blue-500/40 transition-all duration-500" id="card-email" data-style="email" data-card="email">
+      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-emerald-500/40 transition-all duration-500" id="card-email" data-style="email" data-card="email">
         <div class="card-header flex items-center justify-between">
-          <div class="card-title flex items-center gap-2 sm:gap-3 text-blue-400">
-            <div class="p-1.5 sm:p-2 bg-blue-500/10 rounded-lg sm:rounded-xl">
+          <div class="card-title flex items-center gap-2 sm:gap-3 text-emerald-400">
+            <div class="p-1.5 sm:p-2 bg-emerald-500/10 rounded-lg sm:rounded-xl">
               <span class="material-symbols-outlined text-lg sm:text-xl lg:text-2xl">mail</span>
             </div>
             <span class="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Email</span>
@@ -306,10 +306,10 @@
       </article>
 
       <!-- Speaking Card -->
-      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-sky-400/40 transition-all duration-500 sm:col-span-2 lg:col-span-1" id="card-speaking" data-style="speaking" data-card="speaking">
+      <article class="result-card card p-4 sm:p-6 lg:p-8 rounded-2xl lg:rounded-[2rem] flex flex-col gap-3 sm:gap-4 lg:gap-6 group hover:border-amber-500/40 transition-all duration-500 sm:col-span-2 lg:col-span-1" id="card-speaking" data-style="speaking" data-card="speaking">
         <div class="card-header flex items-center justify-between">
-          <div class="card-title flex items-center gap-2 sm:gap-3 text-sky-400">
-            <div class="p-1.5 sm:p-2 bg-sky-500/10 rounded-lg sm:rounded-xl">
+          <div class="card-title flex items-center gap-2 sm:gap-3 text-amber-400">
+            <div class="p-1.5 sm:p-2 bg-amber-500/10 rounded-lg sm:rounded-xl">
               <span class="material-symbols-outlined text-lg sm:text-xl lg:text-2xl">mic</span>
             </div>
             <span class="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white">Speaking</span>
