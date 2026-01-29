@@ -404,6 +404,19 @@
       opt.style.backgroundColor = '#1a1c23';
       opt.style.color = '#e2e8f0';
     });
+
+    // Fix iOS scroll jump when focusing textarea
+    const textarea = document.getElementById('input-text');
+    if (textarea) {
+      textarea.addEventListener('focus', (e) => {
+        // Store current scroll position
+        const scrollY = window.scrollY;
+        // After a short delay, restore scroll position
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+        }, 100);
+      });
+    }
   </script>
 </body>
 </html>
