@@ -14,7 +14,7 @@ const Config = {
   DEFAULT_PROVIDER: 'azure',
   
   // Input Constraints
-  MAX_INPUT_LENGTH: 200,
+  MAX_INPUT_LENGTH: 500,
   MAX_INPUT_LENGTH_UNLIMITED: 10000, // For models without limit
   
   // Unified model list - single source of truth

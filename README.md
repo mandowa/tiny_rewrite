@@ -53,12 +53,47 @@ A lightweight web app that helps non-native English speakers improve their workp
 - Press Tab or Enter to apply correction
 - Press Escape to dismiss
 
-## Tech Stack
+## Technical Architecture
 
-- Pure JavaScript (no frameworks)
-- Levenshtein distance algorithm for spell suggestions
-- Server-Sent Events (SSE) for streaming
-- Web Speech API for TTS
+The application is built with **Pure Vanilla JavaScript (ES6+)** using a component-based architecture, ensuring high performance and zero build-step requirements.
+
+### System Components
+
+| Component | Responsibility |
+|-----------|----------------|
+| **App Controller** | Orchestrates application flow, manages global state (`AppState`), and initializes services. |
+| **API Client** | Unified interface for AI providers (OpenAI/Gemini). Handles API calls and SSE streaming via `StreamingHandler`. |
+| **Input Area** | Manages user input, validation (`ValidationService`), and real-time spell checking integration. |
+| **Rewrite Display** | Renders streaming responses and manages text-to-speech (`TTSService`) interactions. |
+| **Spell Checker** | Client-side spell checking using Levenshtein distance algorithm against a local 50k-word `dictionary.json`. |
+
+### Data Flow
+
+```mermaid
+graph TD
+    User[User Input] --> InputArea
+    InputArea -->|Debounce| SpellChecker[Spell Checker]
+    SpellChecker --Suggestions--> SpellUI[Spell Check UI]
+    
+    User -->|Click Rewrite| App[App Controller]
+    App -->|Generate| API[API Client]
+    
+    API -->|Request| Provider{AI Provider}
+    Provider -->|Azure/Gemini| API
+    
+    API -->|SSE Stream| Stream[Streaming Handler]
+    Stream -->|Token| UI[Rewrite Display]
+    
+    UI -->|Click Play| TTS[TTS Service]
+    TTS -->|Audio| User
+```
+
+### Key Technologies
+
+- **Core**: Native JavaScript, HTML5, CSS3
+- **Algorithm**: Levenshtein distance for spell suggestions
+- **Network**: Server-Sent Events (SSE) for real-time text streaming
+- **Audio**: Web Speech API for Text-to-Speech (TTS)
 
 ## API Costs
 
