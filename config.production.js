@@ -20,7 +20,7 @@ const Config = {
   // Unified model list - single source of truth
   ALL_MODELS: [
     { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality', provider: 'azure' },
-    { id: 'dft-foundry-resource.gpt-4.1', label: 'GPT-4.1', description: 'Balanced', provider: 'azure' },
+    { id: 'dft-foundry-eastus2-resource.Kimi-K2.5', label: 'Kimi-K2.5', description: 'Balanced', provider: 'azure' },
     { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
     { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest', provider: 'gemini' },
     { id: 'qwen-plus', label: 'Qwen Plus', description: 'Alibaba AI', provider: 'qwen' },
@@ -28,7 +28,7 @@ const Config = {
   ],
   
   DEFAULT_MODELS: {
-    azure: 'dft-foundry-resource.gpt-4.1',
+    azure: 'dft-foundry-eastus2-resource.Kimi-K2.5',
     gemini: 'gemini-2.5-flash-lite',
     qwen: 'qwen-plus',
     nvidia: 'meta/llama-3.1-70b-instruct'
