@@ -7,7 +7,6 @@ const Config = {
   API_PROVIDERS: {
     azure: { name: 'Azure Foundry', type: 'proxy' },
     gemini: { name: 'Google Gemini', type: 'proxy' },
-    qwen: { name: 'Alibaba Qwen', type: 'proxy' },
     nvidia: { name: 'NVIDIA NIM', type: 'proxy' }
   },
   
@@ -23,14 +22,14 @@ const Config = {
     { id: 'dft-foundry-eastus2-resource.Kimi-K2.5', label: 'Kimi-K2.5', description: 'Balanced', provider: 'azure' },
     { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
     { id: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash Lite', description: 'Fastest', provider: 'gemini' },
-    { id: 'qwen-plus', label: 'Qwen Plus', description: 'Alibaba AI', provider: 'qwen' },
+    { id: 'dft-foundry-eastus2-resource.gpt-5.4', label: 'GPT 5.4', description: 'Latest GPT', provider: 'azure' },
     { id: 'meta/llama-3.3-70b-instruct', label: 'Llama 3.3 70B', description: 'Meta AI', provider: 'nvidia', unlimited: true }
   ],
   
   DEFAULT_MODELS: {
     azure: 'dft-foundry-eastus2-resource.Kimi-K2.5',
     gemini: 'gemini-2.5-flash-lite',
-    qwen: 'qwen-plus',
+    azure_gpt54: 'dft-foundry-eastus2-resource.gpt-5.4',
     nvidia: 'meta/llama-3.1-70b-instruct'
   },
   
