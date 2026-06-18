@@ -170,11 +170,17 @@ Rewrite for speaking: [/INST]`
   
   // TTS Configuration
   TTS_CONFIG: {
+    // 'browser' = Web Speech API (free, instant)
+    // 'gemini' = Gemini TTS API (high quality, costs tokens)
+    ENGINE: 'browser',
     DEFAULT_LANG: 'en-US',
     DEFAULT_RATE: 1.0,
     DEFAULT_PITCH: 1.0,
     DEFAULT_VOLUME: 1.0,
-    PREFERRED_VOICES: ['Google US English', 'Microsoft David', 'Alex', 'Samantha']
+    PREFERRED_VOICES: ['Google US English', 'Microsoft David', 'Alex', 'Samantha'],
+    // Gemini TTS settings
+    GEMINI_VOICE: 'Kore',
+    GEMINI_MODEL: 'gemini-3.1-flash-tts-preview'
   },
   
   // Error Messages

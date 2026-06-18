@@ -22,7 +22,7 @@ class ValidationService {
 }
 
 // ============================================================================
-// TTS Service
+// TTS Service (Browser SpeechSynthesis)
 // ============================================================================
 class TTSService {
   constructor() {
@@ -61,6 +61,11 @@ class TTSService {
     
     this.currentUtterance = utterance;
     this.synth.speak(utterance);
+    
+    return new Promise((resolve) => {
+      utterance.onend = resolve;
+      utterance.onerror = resolve;
+    });
   }
   
   stop() {
@@ -80,6 +85,89 @@ class TTSService {
   
   resume() {
     this.synth.resume();
+  }
+}
+
+// ============================================================================
+// Gemini TTS Service (API-based, high quality)
+// ============================================================================
+class GeminiTTSService {
+  constructor() {
+    this.audioContext = null;
+    this.currentSource = null;
+    this.isCurrentlyPlaying = false;
+  }
+
+  async speak(text) {
+    this.stop();
+    
+    const response = await fetch(Config.API_PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: 'tts',
+        model: Config.TTS_CONFIG.GEMINI_MODEL,
+        messages: [{ content: text, voice: Config.TTS_CONFIG.GEMINI_VOICE }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`TTS API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const audioBase64 = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    
+    if (!audioBase64) {
+      throw new Error('No audio data in response');
+    }
+
+    // Decode base64 to PCM buffer
+    const binaryStr = atob(audioBase64);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) {
+      bytes[i] = binaryStr.charCodeAt(i);
+    }
+
+    // Convert PCM (16-bit, 24kHz, mono) to AudioBuffer
+    if (!this.audioContext) {
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    const sampleRate = 24000;
+    const int16Array = new Int16Array(bytes.buffer);
+    const audioBuffer = this.audioContext.createBuffer(1, int16Array.length, sampleRate);
+    const channelData = audioBuffer.getChannelData(0);
+    
+    for (let i = 0; i < int16Array.length; i++) {
+      channelData[i] = int16Array[i] / 32768.0;
+    }
+
+    // Play
+    this.currentSource = this.audioContext.createBufferSource();
+    this.currentSource.buffer = audioBuffer;
+    this.currentSource.connect(this.audioContext.destination);
+    this.isCurrentlyPlaying = true;
+    
+    return new Promise((resolve) => {
+      this.currentSource.onended = () => {
+        this.isCurrentlyPlaying = false;
+        resolve();
+      };
+      this.currentSource.start();
+    });
+  }
+
+  stop() {
+    if (this.currentSource) {
+      try { this.currentSource.stop(); } catch (e) { /* already stopped */ }
+      this.currentSource = null;
+    }
+    this.isCurrentlyPlaying = false;
+  }
+
+  isSpeaking() {
+    return this.isCurrentlyPlaying;
   }
 }
 
@@ -569,7 +657,12 @@ class RewriteDisplay {
     
     if (enableTTS) {
       this.playBtn = this.card.querySelector('.play-btn');
-      this.ttsService = new TTSService();
+      // Choose TTS engine based on config
+      if (Config.TTS_CONFIG.ENGINE === 'gemini') {
+        this.ttsService = new GeminiTTSService();
+      } else {
+        this.ttsService = new TTSService();
+      }
       this.setupTTS();
     }
     
@@ -661,13 +754,19 @@ class RewriteDisplay {
     try {
       this.playBtn.classList.add('playing');
       
-      this.ttsService.speak(text);
+      const promise = this.ttsService.speak(text);
       
-      // Listen for speech end
+      // For browser TTS, also listen to utterance onend
       if (this.ttsService.currentUtterance) {
         this.ttsService.currentUtterance.onend = () => {
           this.stopAudio();
         };
+      }
+      
+      // For Gemini TTS, await the promise
+      if (promise && typeof promise.then === 'function') {
+        await promise;
+        this.stopAudio();
       }
     } catch (error) {
       console.error('TTS failed:', error);

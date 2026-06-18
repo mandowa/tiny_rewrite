@@ -33,7 +33,40 @@ export default {
 
       let response;
       
-      if (provider === 'azure') {
+      // TTS endpoint
+      if (provider === 'tts') {
+        const projectId = env.GCP_PROJECT_ID || 'planar-night-499717-a2';
+        const region = env.GCP_REGION || 'global';
+        const host = region === 'global' 
+          ? 'aiplatform.googleapis.com' 
+          : `${region}-aiplatform.googleapis.com`;
+        const ttsModel = model || 'gemini-3.1-flash-tts-preview';
+        const text = messages[0]?.content || '';
+        
+        response = await fetch(
+          `https://${host}/v1/projects/${projectId}/locations/${region}/publishers/google/models/${ttsModel}:generateContent`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': env.GEMINI_API_KEY
+            },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: text }] }],
+              generationConfig: {
+                responseModalities: ['AUDIO'],
+                speechConfig: {
+                  voiceConfig: {
+                    prebuiltVoiceConfig: {
+                      voiceName: messages[0]?.voice || 'Kore'
+                    }
+                  }
+                }
+              }
+            })
+          }
+        );
+      } else if (provider === 'azure') {
         // Azure Foundry (OpenAI-compatible)
         response = await fetch(env.AZURE_ENDPOINT, {
           method: 'POST',
