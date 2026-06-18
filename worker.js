@@ -52,7 +52,7 @@ export default {
               'x-goog-api-key': env.GEMINI_API_KEY
             },
             body: JSON.stringify({
-              contents: [{ parts: [{ text: text }] }],
+              contents: [{ role: 'user', parts: [{ text: text }] }],
               generationConfig: {
                 responseModalities: ['AUDIO'],
                 speechConfig: {
