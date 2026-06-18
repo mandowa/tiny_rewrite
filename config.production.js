@@ -172,7 +172,7 @@ Rewrite for speaking: [/INST]`
   TTS_CONFIG: {
     // 'browser' = Web Speech API (free, instant)
     // 'gemini' = Gemini TTS API (high quality, costs tokens)
-    ENGINE: 'browser',
+    ENGINE: 'gemini',
     DEFAULT_LANG: 'en-US',
     DEFAULT_RATE: 1.0,
     DEFAULT_PITCH: 1.0,
