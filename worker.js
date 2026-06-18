@@ -41,7 +41,8 @@ export default {
           ? 'aiplatform.googleapis.com' 
           : `${region}-aiplatform.googleapis.com`;
         const ttsModel = model || 'gemini-3.1-flash-tts-preview';
-        const text = messages[0]?.content || '';
+        const rawText = messages[0]?.content || '';
+        const text = `Say in a clear, natural, and professional tone: ${rawText}`;
         
         response = await fetch(
           `https://${host}/v1/projects/${projectId}/locations/${region}/publishers/google/models/${ttsModel}:generateContent`,
