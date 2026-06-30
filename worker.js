@@ -45,7 +45,7 @@ export default {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'x-goog-api-key': env.GEMINI_API_KEY
+              'x-goog-api-key': env.GEMINI_AISTUDIO_KEY
             },
             body: JSON.stringify({
               contents: [{ role: 'user', parts: [{ text: text }] }],
@@ -115,7 +115,7 @@ export default {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'x-goog-api-key': env.GEMINI_API_KEY
+              'x-goog-api-key': env.GEMINI_AISTUDIO_KEY
             },
             body: JSON.stringify({
               contents: [{ 
