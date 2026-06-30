@@ -10,7 +10,7 @@ const Config = {
     nvidia: { name: 'NVIDIA NIM', type: 'proxy' }
   },
   
-  DEFAULT_PROVIDER: 'azure',
+  DEFAULT_PROVIDER: 'gemini',
   
   // Input Constraints
   MAX_INPUT_LENGTH: 500,
