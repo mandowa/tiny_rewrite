@@ -33,19 +33,14 @@ export default {
 
       let response;
       
-      // TTS endpoint
+      // TTS endpoint - uses AI Studio endpoint (TTS preview model requires it)
       if (provider === 'tts') {
-        const projectId = env.GCP_PROJECT_ID || 'planar-night-499717-a2';
-        const region = env.GCP_REGION || 'global';
-        const host = region === 'global' 
-          ? 'aiplatform.googleapis.com' 
-          : `${region}-aiplatform.googleapis.com`;
         const ttsModel = model || 'gemini-3.1-flash-tts-preview';
         const rawText = messages[0]?.content || '';
         const text = `Say in a clear, natural, and professional tone: ${rawText}`;
-        
+
         response = await fetch(
-          `https://${host}/v1/projects/${projectId}/locations/${region}/publishers/google/models/${ttsModel}:generateContent`,
+          `https://generativelanguage.googleapis.com/v1beta/models/${ttsModel}:generateContent`,
           {
             method: 'POST',
             headers: {
