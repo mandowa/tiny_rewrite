@@ -105,19 +105,12 @@ export default {
           })
         });
       } else if (provider === 'gemini') {
-        // Google Gemini via Vertex AI (Agent Platform) - GCP billing
-        const projectId = env.GCP_PROJECT_ID || 'planar-night-499717-a2';
-        const region = env.GCP_REGION || 'global';
+        // Google Gemini via AI Studio endpoint
         const systemPrompt = messages.find(m => m.role === 'system')?.content || '';
         const userMessage = messages.find(m => m.role === 'user')?.content || '';
         
-        // Global uses no region prefix in host, regional uses {region}- prefix
-        const host = region === 'global' 
-          ? 'aiplatform.googleapis.com' 
-          : `${region}-aiplatform.googleapis.com`;
-        
         response = await fetch(
-          `https://${host}/v1/projects/${projectId}/locations/${region}/publishers/google/models/${model}:generateContent`,
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
           {
             method: 'POST',
             headers: {
