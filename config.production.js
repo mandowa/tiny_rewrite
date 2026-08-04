@@ -6,8 +6,7 @@ const Config = {
   // Providers (used for compatibility, actual keys are in Worker)
   API_PROVIDERS: {
     azure: { name: 'Azure Foundry', type: 'proxy' },
-    gemini: { name: 'Google Gemini', type: 'proxy' },
-    nvidia: { name: 'NVIDIA NIM', type: 'proxy' }
+    gemini: { name: 'Google Gemini', type: 'proxy' }
   },
   
   DEFAULT_PROVIDER: 'gemini',
@@ -18,19 +17,13 @@ const Config = {
   
   // Unified model list - single source of truth
   ALL_MODELS: [
-    { id: 'dft-foundry-resource.gpt-5-mini', label: 'GPT-5 Mini', description: 'Fast & Quality', provider: 'azure' },
-    { id: 'dft-foundry-eastus2-resource.Kimi-K2.5', label: 'Kimi-K2.5', description: 'Balanced', provider: 'azure' },
-    { id: 'dft-foundry-resource.DeepSeek-V3.2', label: 'DeepSeek V3.2', description: 'Powerful', provider: 'azure' },
-    { id: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite', description: 'Fastest', provider: 'gemini' },
-    { id: 'dft-foundry-eastus2-resource.gpt-5.4', label: 'GPT 5.4', description: 'Latest GPT', provider: 'azure' },
-    { id: 'meta/llama-3.3-70b-instruct', label: 'Llama 3.3 70B', description: 'Meta AI', provider: 'nvidia', unlimited: true }
+    { id: 'dft-foundry-eastus2-resource.gpt-5.6-luna', label: 'GPT-5.6 Luna', description: 'Latest GPT', provider: 'azure' },
+    { id: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite', description: 'Fastest', provider: 'gemini' }
   ],
   
   DEFAULT_MODELS: {
-    azure: 'dft-foundry-eastus2-resource.Kimi-K2.5',
-    gemini: 'gemini-3.1-flash-lite',
-    azure_gpt54: 'dft-foundry-eastus2-resource.gpt-5.4',
-    nvidia: 'meta/llama-3.1-70b-instruct'
+    azure: 'dft-foundry-eastus2-resource.gpt-5.6-luna',
+    gemini: 'gemini-3.1-flash-lite'
   },
   
   // Rewrite Styles

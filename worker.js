@@ -90,20 +90,6 @@ export default {
             stream: true
           })
         });
-      } else if (provider === 'nvidia') {
-        // NVIDIA NIM (OpenAI-compatible)
-        response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${env.NVIDIA_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: model,
-            messages: messages,
-            stream: true
-          })
-        });
       } else if (provider === 'gemini') {
         // Google Gemini via AI Studio endpoint
         const systemPrompt = messages.find(m => m.role === 'system')?.content || '';
