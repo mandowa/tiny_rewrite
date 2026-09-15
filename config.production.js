@@ -18,12 +18,12 @@ const Config = {
   // Unified model list - single source of truth
   ALL_MODELS: [
     { id: 'dft-foundry-eastus2-resource.gpt-5.6-luna', label: 'GPT-5.6 Luna', description: 'Latest GPT', provider: 'azure' },
-    { id: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite', description: 'Fastest', provider: 'gemini' }
+    { id: 'gemini-3.8-flash', label: 'Gemini 3.8 Flash', description: 'Fastest', provider: 'gemini' }
   ],
   
   DEFAULT_MODELS: {
     azure: 'dft-foundry-eastus2-resource.gpt-5.6-luna',
-    gemini: 'gemini-3.1-flash-lite'
+    gemini: 'gemini-3.8-flash'
   },
   
   // Rewrite Styles
