@@ -496,6 +496,7 @@ class InputArea {
 
     this.textarea.addEventListener('input', () => this.handleInput());
     this.textarea.addEventListener('keydown', (e) => this.handleKeyDown(e));
+    this.textarea.addEventListener('focus', () => this.handleFocus());
 
     if (this.clearBtn) {
       this.clearBtn.addEventListener('click', () => {
@@ -517,6 +518,21 @@ class InputArea {
     spellChecker.loadDictionary();
   }
   
+  handleFocus() {
+    // iOS Safari sometimes fails to redraw the native caret at its new
+    // position once the page auto-scrolls the textarea above the keyboard,
+    // leaving it visually stuck above the input until something forces a
+    // repaint. Re-applying the current selection after the keyboard's
+    // open animation settles forces that repaint without moving the caret
+    // or disturbing anything the user typed in the meantime.
+    setTimeout(() => {
+      if (document.activeElement !== this.textarea) return;
+      const start = this.textarea.selectionStart;
+      const end = this.textarea.selectionEnd;
+      this.textarea.setSelectionRange(start, end);
+    }, 350);
+  }
+
   handleInput() {
     this.updateCharCount();
     this.updateClearBtn();
