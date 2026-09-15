@@ -403,6 +403,21 @@
       opt.style.color = '#e2e8f0';
     });
 
+    // Pre-collapse the mobile browser's address bar on load, before the
+    // user ever taps into the input. If the toolbar is still expanded at
+    // the moment of first focus, it collapses concurrently with the
+    // keyboard opening and the browser's auto-scroll-into-view, and the
+    // native caret ends up drawn using pre-collapse coordinates (visually
+    // "floating" above the textarea). Scrolling 1px on load lets that
+    // toolbar collapse happen ahead of time, so the first tap has nothing
+    // left to shift underneath it.
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (window.scrollY === 0 && document.documentElement.scrollHeight > window.innerHeight) {
+          window.scrollTo(0, 1);
+        }
+      }, 300);
+    });
   </script>
 </body>
 </html>
