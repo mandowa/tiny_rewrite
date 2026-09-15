@@ -51,6 +51,14 @@
     .input-glow:focus-within {
       box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.15);
     }
+    /* backdrop-filter on this element is a known WebKit trigger for native
+       caret misplacement when the layout shifts (e.g. keyboard opening) -
+       disable it here specifically while we confirm that's the cause. */
+    .input-glow {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: rgba(20, 22, 28, 0.75);
+    }
     .rewrite-btn {
       background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
