@@ -343,6 +343,16 @@ class SpellCheckUI {
     this.currentError = null;
     this.selectedIndex = 0;
     this.onApply = null;
+    this.dismissedWords = new Set();
+  }
+
+  dismiss(word) {
+    this.dismissedWords.add(word.toLowerCase());
+    this.hide();
+  }
+
+  isDismissed(word) {
+    return this.dismissedWords.has(word.toLowerCase());
   }
   
   show(word, wordStart, suggestions) {
@@ -421,9 +431,16 @@ class SpellCheckUI {
         border-bottom:1px solid rgba(255,255,255,0.04);text-align:left;cursor:pointer;
         font-weight:${sel ? '500' : '400'};">${s}</button>`;
     }).join('');
-    
-    return `<div style="padding:10px 14px;font-size:12px;font-weight:600;color:#f87171;
-      background:rgba(239,68,68,0.08);border-bottom:1px solid rgba(255,255,255,0.06);">⚠ 「${word}」</div>${items}`;
+
+    return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;
+      padding:8px 8px 8px 14px;font-size:12px;font-weight:600;color:#f87171;
+      background:rgba(239,68,68,0.08);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <span>⚠ 「${word}」</span>
+      <button type="button" class="spell-dismiss" aria-label="Don't flag this word again" title="Don't flag this word again" style="
+        flex-shrink:0;width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+        background:transparent;border:none;border-radius:6px;color:#f87171;cursor:pointer;
+        font-size:14px;line-height:1;">✕</button>
+      </div>${items}`;
   }
   
   buildContainerStyle(coords) {
@@ -439,6 +456,15 @@ class SpellCheckUI {
       item.onclick = (e) => { e.preventDefault(); e.stopPropagation(); this.applySelection(item.dataset.word); };
       item.onmouseenter = () => { this.selectedIndex = index; this.updateSelection(items); };
     });
+
+    const dismissBtn = this.container.querySelector('.spell-dismiss');
+    if (dismissBtn) {
+      dismissBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.dismiss(this.currentError.word);
+      };
+    }
   }
   
   getPosition(position) {
@@ -576,7 +602,7 @@ class InputArea {
     
     while ((match = wordRegex.exec(text)) !== null) {
       const word = match[0];
-      if (word.length >= 3 && !spellChecker.isCorrect(word)) {
+      if (word.length >= 3 && !spellChecker.isCorrect(word) && !this.spellUI.isDismissed(word)) {
         lastError = { word, start: match.index, end: match.index + word.length };
       }
     }
@@ -630,6 +656,7 @@ class InputArea {
     this.textarea.value = '';
     this.updateCharCount();
     this.updateClearBtn();
+    this.spellUI.dismissedWords.clear();
   }
   
   setEnabled(enabled) {
