@@ -486,16 +486,27 @@ class InputArea {
     this.maxLength = maxLength;
     this.textarea = document.getElementById('input-text');
     this.charCount = document.getElementById('char-count');
+    this.clearBtn = document.getElementById('clear-input-btn');
     this.changeCallbacks = [];
     this.spellCheckTimer = null;
-    
+
     // Initialize spell check UI
     this.spellUI = new SpellCheckUI(this.textarea, document.getElementById('spell-suggestions'));
     this.spellUI.onApply = (word, error) => this.applySuggestion(word, error);
-    
+
     this.textarea.addEventListener('input', () => this.handleInput());
     this.textarea.addEventListener('keydown', (e) => this.handleKeyDown(e));
-    
+
+    if (this.clearBtn) {
+      this.clearBtn.addEventListener('click', () => {
+        this.clear();
+        this.spellUI.hide();
+        this.textarea.focus();
+        this.changeCallbacks.forEach(cb => cb(this.getText()));
+      });
+      this.updateClearBtn();
+    }
+
     document.addEventListener('click', (e) => {
       const container = document.getElementById('spell-suggestions');
       if (!container.contains(e.target) && e.target !== this.textarea) {
@@ -508,6 +519,7 @@ class InputArea {
   
   handleInput() {
     this.updateCharCount();
+    this.updateClearBtn();
     this.changeCallbacks.forEach(cb => cb(this.getText()));
     
     clearTimeout(this.spellCheckTimer);
@@ -569,14 +581,20 @@ class InputArea {
     const newCursorPos = error.start + suggestion.length;
     this.textarea.setSelectionRange(newCursorPos, newCursorPos);
     this.textarea.focus();
-    
+
     this.updateCharCount();
+    this.updateClearBtn();
     this.changeCallbacks.forEach(cb => cb(this.getText()));
   }
   
   updateCharCount() {
     const count = this.getCharCount();
     this.charCount.textContent = `${count} / ${this.maxLength}`;
+  }
+
+  updateClearBtn() {
+    if (!this.clearBtn) return;
+    this.clearBtn.classList.toggle('hidden', this.getText().length === 0);
   }
   
   getText() {
@@ -595,6 +613,7 @@ class InputArea {
   clear() {
     this.textarea.value = '';
     this.updateCharCount();
+    this.updateClearBtn();
   }
   
   setEnabled(enabled) {
