@@ -976,7 +976,16 @@ class App {
         console.error('Failed to load style preferences:', e);
       }
     }
+    this.syncStyleButtons();
     this.updateRewriteButton();
+  }
+
+  syncStyleButtons() {
+    document.querySelectorAll('.style-chip').forEach(button => {
+      const style = button.dataset.chip;
+      const checkbox = document.getElementById(`style-${style}`);
+      button.classList.toggle('active', Boolean(checkbox?.checked));
+    });
   }
   
   saveStylePreferences() {
